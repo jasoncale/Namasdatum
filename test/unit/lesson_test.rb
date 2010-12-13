@@ -1,6 +1,5 @@
 require 'test_helper'
 require 'shoulda'
-require 'nokogiri'
 
 class LessonTest < ActiveSupport::TestCase
 
