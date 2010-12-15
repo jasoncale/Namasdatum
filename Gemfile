@@ -9,4 +9,5 @@ gem 'haml'
 
 group :development, :test do
   gem 'shoulda'
+  gem 'webmock'
 end
