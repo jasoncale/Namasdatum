@@ -1,0 +1,19 @@
+!!! 5
+%html
+  %head
+    %title Namasdatum
+    :plain
+      <!--[if gte IE 7]><!-->
+        #{stylesheet_link_tag %w(screen)}    
+      <!-- <![endif]-->
+            
+    = javascript_include_tag :defaults
+    = csrf_meta_tag
+
+  %body
+    #page
+      %p.notice=notice
+      %p.alert=alert
+    
+      #content
+        =yield

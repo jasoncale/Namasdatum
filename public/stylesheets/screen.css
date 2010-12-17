@@ -1,0 +1,20 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;font-size:100%;vertical-align:baseline;border:0;outline:0;background:transparent;}
+ol,ul{list-style:none;}
+blockquote,q{quotes:none;}
+:focus{outline:0;}
+table{border-collapse:collapse;border-spacing:0;}
+body{font-size:12px;font-family:Helvetica,sans-serif;}body h1{font-size:2em;line-height:1.5em;margin-top:0.75em;margin-bottom:0em;}
+body h2{font-size:1.8333em;line-height:1.6364em;margin-top:0.8182em;margin-bottom:0em;}
+body h3{font-size:1.6667em;line-height:1.8em;margin-top:0.9em;margin-bottom:0em;}
+body h4{font-size:1.5em;line-height:1em;margin-top:1em;margin-bottom:0em;}
+body h5{font-size:1.3333em;line-height:1.125em;margin-top:1.125em;margin-bottom:0em;}
+body h6{font-size:1.1667em;line-height:1.2857em;margin-top:1.2857em;margin-bottom:0em;}
+body p{font-size:1em;line-height:1.5em;margin:0 0 1.5em 0;}
+body .calendar{width:86em;border:1px solid #eee;margin:0 auto;}body .calendar h2{text-align:center;text-transform:uppercase;color:#aaa;}
+body .calendar ol li{float:left;display:block;width:10em;height:10em;}body .calendar ol li h3.date{font-size:3em;text-align:center;}
+body .calendar ol li.attended h3.date{color:red;}
+body .calendar ol li.attended h3.teacher{font-size:1em;}
+body .calendar ol li.in_the_future h3.date{color:#eee;}
+hr,.hide{display:none;}
+a img{border:none;}
+.group:after{content:".";display:block;height:0;clear:both;visibility:hidden;}

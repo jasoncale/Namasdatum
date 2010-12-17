@@ -5,7 +5,7 @@
 .calendar
   %h2=@current_time.strftime("%B")
   
-  %ol
+  %ol.group
     -Time.days_in_month(@current_time.month).times do |i|
       - date = i+1
       - lessons_on_this_day = @lessons.select{|lesson| lesson.attended_at.day == date }
@@ -14,8 +14,8 @@
       - css_classes << "in_the_future" if date > @current_time.day
       
       %li{:class => css_classes }
+        %h3.date=date
         -lessons_on_this_day.each do |lesson|
-          %h3.date=date
           .lesson
             %h3.teacher=lesson.teacher.name
             %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')

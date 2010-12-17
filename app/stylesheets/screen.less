@@ -1,0 +1,124 @@
+@import "import/reset.less";
+
+body {
+  
+  font-size: 12px;
+  font-family: Helvetica, sans-serif;
+
+  h1 {
+    font-size: 2em; /* 24px */
+    line-height: 1.5em; /* 36px */
+    margin-top: 0.75em;
+    margin-bottom: 0em;
+  }
+
+  h2 {
+    font-size: 1.8333em; /* 22px */
+    line-height: 1.6364em; /* 36px */
+    margin-top: 0.8182em;
+    margin-bottom: 0em;
+  }
+  
+  h3 {
+    font-size: 1.6667em; /* 20px */
+    line-height: 1.8em; /* 36px */
+    margin-top: 0.9em;
+    margin-bottom: 0em;
+  }
+  
+  h4 {
+    font-size: 1.5em; /* 18px */
+    line-height: 1em; /* 18px */
+    margin-top: 1em;
+    margin-bottom: 0em;
+  }
+  
+  h5 {
+    font-size: 1.3333em; /* 16px */
+    line-height: 1.125em; /* 18px */
+    margin-top: 1.125em;
+    margin-bottom: 0em;
+  }
+  
+  h6 {
+    font-size: 1.1667em; /* 14px */
+    line-height: 1.2857em; /* 18px */
+    margin-top: 1.2857em;
+    margin-bottom: 0em;
+  }
+
+  p {
+    font-size: 1em; /* 12px */
+    line-height: 1.5em; /* 18px */
+    margin: 0 0 1.5em 0;
+  }
+  
+  .calendar {
+    width: 86em;
+    border: 1px solid #eee;
+    margin: 0 auto;
+    
+    h2 {
+      text-align: center;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    
+    ol {
+      li {
+        float: left;
+        display: block;
+        width: 10em;
+        height: 10em;
+        
+        h3.date {
+          font-size: 3em;
+          text-align: center;
+        }
+        
+        .lesson {
+
+        }
+      }
+      
+      li.attended {
+        h3.date {
+          color: red;
+        }
+        
+        h3.teacher {
+          font-size: 1em;
+        }
+        
+      } 
+      
+      li.in_the_future {
+        h3.date {
+          color: #eee;
+        }
+      }
+    }
+  }
+  
+}
+
+/* misc.
+--------------------------------------------- */
+
+hr, .hide {
+	display: none;
+}
+
+a img {
+	border: none;
+}
+
+/* self-clear floats */
+
+.group:after {
+	content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
