@@ -4,8 +4,9 @@ class UserTest < ActiveSupport::TestCase
   
   context "Importing a single lesson" do
     setup do            
-      @user = User.create!
-      @user.record_lessons(Nokogiri::HTML(import_html('user_history_single_lesson')))
+      stub_user_history('user_history_single_lesson')
+      @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
+      @user.fetch_lesson_history
     end
     
     should "record the lesson" do
@@ -27,12 +28,13 @@ class UserTest < ActiveSupport::TestCase
   
   context "Importing entire user history" do
     setup do
-      @user = User.create!
-      @user.record_lessons(Nokogiri::HTML(import_html('user_history')))
+      stub_user_history('user_history')
+      @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
+      @user.fetch_lesson_history
     end
   
     should "record all the lessons" do
-      assert_equal(129, @user.lessons.count)
+      assert_equal(128, @user.lessons.count)
     end
     
     should "only record Balham as a studio" do
@@ -42,10 +44,21 @@ class UserTest < ActiveSupport::TestCase
     
     context "and attempting to re-import without any new lessons" do
       setup do
-        @user.record_lessons(Nokogiri::HTML(import_html('user_history')))
+        @user.fetch_lesson_history
       end
   
       should "not record anymore lessons" do
+        assert_equal(128, @user.lessons.count)
+      end
+    end
+    
+    context "and attempting to re-import without any new lessons" do
+      setup do
+        stub_user_history('user_history_with_new_lesson')
+        @user.fetch_lesson_history
+      end
+  
+      should "record just the new lesson" do
         assert_equal(129, @user.lessons.count)
       end
     end
@@ -54,28 +67,13 @@ class UserTest < ActiveSupport::TestCase
    
   context "Fetching user history from mindbodyonline.com" do
     setup do      
-      # stub home page
-      stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
-        html_body('app_index')
-      )
-      
-      # stub session creation post
-      stub_request(:post, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134")
-      
-      # stub logging in
-      stub_request(:post, "https://clients.mindbodyonline.com/ASP/login_p.asp")
-      
-      # stub getting user history
-      stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
-        html_body('user_history')
-      )
-      
+      stub_user_history('user_history')
       @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
       @user.fetch_lesson_history
     end
   
     should "fetch the users entire lesson history" do
-      assert_equal(129, @user.lessons.count)
+      assert_equal(128, @user.lessons.count)
     end
   end
   
@@ -90,6 +88,24 @@ class UserTest < ActiveSupport::TestCase
       :body => import_html(filename),
       :headers => { "Content-Type" => "text/html" }
     }
+  end
+  
+  def stub_user_history(user_history_filename)
+    # stub home page
+    stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
+      html_body('app_index')
+    )
+    
+    # stub session creation post
+    stub_request(:post, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134")
+    
+    # stub logging in
+    stub_request(:post, "https://clients.mindbodyonline.com/ASP/login_p.asp")
+    
+    # stub getting user history
+    stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
+      html_body(user_history_filename)
+    )
   end
 
 end
