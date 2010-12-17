@@ -5,7 +5,7 @@ class UserTest < ActiveSupport::TestCase
   context "Importing a single lesson" do
     setup do            
       @user = User.create!
-      @user.record_lessons(Nokogiri::HTML(import_html('single_lesson_import')))
+      @user.record_lessons(Nokogiri::HTML(import_html('user_history_single_lesson')))
     end
     
     should "record the lesson" do
@@ -28,11 +28,11 @@ class UserTest < ActiveSupport::TestCase
   context "Importing entire user history" do
     setup do
       @user = User.create!
-      @user.record_lessons(Nokogiri::HTML(import_html('entire_lesson_import')))
+      @user.record_lessons(Nokogiri::HTML(import_html('user_history')))
     end
   
     should "record all the lessons" do
-      assert_equal(127, @user.lessons.count)
+      assert_equal(129, @user.lessons.count)
     end
     
     should "only record Balham as a studio" do
@@ -42,34 +42,56 @@ class UserTest < ActiveSupport::TestCase
     
     context "and attempting to re-import without any new lessons" do
       setup do
-        @user.record_lessons(Nokogiri::HTML(import_html('entire_lesson_import')))
+        @user.record_lessons(Nokogiri::HTML(import_html('user_history')))
       end
-
+  
       should "not record anymore lessons" do
-        assert_equal(127, @user.lessons.count)
+        assert_equal(129, @user.lessons.count)
       end
     end
     
   end
-  
+   
   context "Fetching user history from mindbodyonline.com" do
     setup do      
-      WebMock.allow_net_connect!
-    
-      # stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
-      #   :body => File.new(File.join(Rails.root, "/test/fixtures/", "sample_user_history.html")), 
-      #   :status => 200
-      # )
+      # stub home page
+      stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
+        html_body('scrape_index')
+      )
+      
+      # stub session creation post
+      stub_request(:post, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134")
+      
+      # stub logging in
+      stub_request(:post, "https://clients.mindbodyonline.com/ASP/login_p.asp")
+      
+      # stub getting user history
+      stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
+        html_body('user_history')
+      )
         
       # To run this currently you will need Jase's username and password which isn't in the repo :)
         
       @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
       @user.fetch_lesson_history
     end
-
+  
     should "fetch the users entire lesson history" do
-      assert_equal(128, @user.lessons.count)
+      assert_equal(129, @user.lessons.count)
     end
   end
   
+  private
+  
+  def import_html(filename)
+    return File.read(File.join(File.expand_path('../../test/fixtures'), "#{filename}.html"))
+  end
+  
+  def html_body(filename)
+    {
+      :body => import_html(filename),
+      :headers => { "Content-Type" => "text/html" }
+    }
+  end
+
 end

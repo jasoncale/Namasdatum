@@ -11,8 +11,4 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-  
-  def import_html(filename)
-    return File.read(File.join(File.expand_path('../../test/fixtures'), "#{filename}.html"))
-  end
 end

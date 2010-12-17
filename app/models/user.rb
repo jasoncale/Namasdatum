@@ -17,34 +17,37 @@ class User < ActiveRecord::Base
       "requiredtxtPassword" => self.mindbodyonline_pw
     )
     
-    agent.get("https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2") do |history_page|
-      record_lessons(history_page.parser)
+    agent.get("https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2") do |history_page|      
+      record_lessons(history_page.root)
     end
   end
   
   def record_lessons(document)
     rows = document.css("table tr")    
-    rows[2..rows.length].each do |row|
-     if row.css('td').length == 11
-       date = row.at_css('td:nth-child(1)').inner_text.gsub(/\302\240/, ' ')
-       time = row.at_css('td:nth-child(3)').inner_text.gsub(/\302\240/, ' ')
-       teacher = row.at_css('td:nth-child(4)').inner_text.gsub(/\302\240/, ' ')
-       studio = row.at_css('td:nth-child(5)').inner_text.gsub(/\302\240/, ' ').gsub('Hot Bikram Yoga', '').strip
+    
+    if rows.length > 2
+      rows[2..rows.length].each do |row|
+       if row.css('td').length == 11
+         date = row.at_css('td:nth-child(1)').inner_text.gsub(/\302\240/, ' ')
+         time = row.at_css('td:nth-child(3)').inner_text.gsub(/\302\240/, ' ')
+         teacher = row.at_css('td:nth-child(4)').inner_text.gsub(/\302\240/, ' ')
+         studio = row.at_css('td:nth-child(5)').inner_text.gsub(/\302\240/, ' ').gsub('Hot Bikram Yoga', '').strip
 
-       # format parsable date and remove any &nbsp;
-       date_to_parse = [date, time].join(" ").strip
+         # format parsable date and remove any &nbsp;
+         date_to_parse = [date, time].join(" ").strip
 
-       begin
-         self.lessons.create({
-           :attended_at => DateTime.strptime(date_to_parse, '%d/%m/%Y %H:%M %p').to_time.in_time_zone,
-           :teacher => Teacher.find_or_create_by_name(teacher),
-           :studio => Studio.find_or_create_by_name(studio)
-         })            
-       rescue ArgumentError => e
-         p "Import caused error #{e}"
-       end        
-     end
-    end
+         begin
+           self.lessons.create({
+             :attended_at => DateTime.strptime(date_to_parse, '%d/%m/%Y %H:%M %p').to_time.in_time_zone,
+             :teacher => Teacher.find_or_create_by_name(teacher),
+             :studio => Studio.find_or_create_by_name(studio)
+           })            
+         rescue ArgumentError => e
+           p "Import caused error #{e}"
+         end        
+       end
+      end  
+    end    
   end
 
 end
