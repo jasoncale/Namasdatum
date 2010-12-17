@@ -69,9 +69,7 @@ class UserTest < ActiveSupport::TestCase
       stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
         html_body('user_history')
       )
-        
-      # To run this currently you will need Jase's username and password which isn't in the repo :)
-        
+      
       @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
       @user.fetch_lesson_history
     end
