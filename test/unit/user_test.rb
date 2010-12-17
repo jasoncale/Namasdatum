@@ -56,7 +56,7 @@ class UserTest < ActiveSupport::TestCase
     setup do      
       # stub home page
       stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
-        html_body('scrape_index')
+        html_body('app_index')
       )
       
       # stub session creation post
@@ -82,7 +82,7 @@ class UserTest < ActiveSupport::TestCase
   private
   
   def import_html(filename)
-    return File.read(File.join(File.expand_path('../../test/fixtures'), "#{filename}.html"))
+    return File.read(File.join(File.expand_path('../../test/fixtures/html_content'), "#{filename}.html"))
   end
   
   def html_body(filename)
