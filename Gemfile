@@ -13,4 +13,6 @@ group :development, :test do
   gem 'webmock'
   gem 'capybara'
   gem 'launchy'
+  gem 'faker'
+  gem 'factory_girl'
 end

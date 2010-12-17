@@ -4,7 +4,7 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
   
   context "Signing up for an account" do
     setup do
-      signup_as('john')
+      sign_up(:username => 'john')
     end
     
     should "show their profile page" do
@@ -19,9 +19,9 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
   
   context "Logging into an account" do
     setup do
-      signup_as('john')
-      signout
-      signin_as('john')
+      sign_up(:username => 'john')
+      sign_out
+      sign_in(:username => 'john')
     end
 
     should "show their profile page" do
@@ -31,23 +31,27 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
   
   private
   
-  def signup_as(username)
-    visit '/users/sign_up'
-    fill_in 'Username', :with => username
-    fill_in 'Email', :with => 'john@yogabitch.com'
-    fill_in 'Password', :with => "testing"
-    fill_in 'Password confirmation', :with => "testing"
+  def sign_up(attributes)
+    attributes.reverse_merge!(Factory.attributes_for(:user))
+
+    visit '/users/sign_up'    
+    fill_in 'Username', :with => attributes[:username]
+    fill_in 'Email', :with => attributes[:email]
+    fill_in 'Password', :with => attributes[:password]
+    fill_in 'Password confirmation', :with => attributes[:password]
     click_button 'Sign up'
   end
   
-  def signin_as(username, password = 'testing')
+  def sign_in(attributes)
+    attributes.reverse_merge!(Factory.attributes_for(:user))
+
     visit '/users/sign_in'
-    fill_in 'Username', :with => username
-    fill_in 'Password', :with => password
+    fill_in 'Username', :with => attributes[:username]
+    fill_in 'Password', :with => attributes[:password]
     click_button 'Sign in'
   end
   
-  def signout
+  def sign_out
     visit '/users/sign_out'
   end
   
