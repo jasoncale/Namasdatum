@@ -1,18 +1,20 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.3'
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'mysql', '2.8.1'
 
-gem 'nokogiri'
-gem 'mechanize'
 gem 'haml'
 gem 'devise'
 
-group :development, :test do
+gem 'nokogiri'
+gem 'mechanize'
+
+group :test do  
   gem 'shoulda'
-  gem 'webmock'
   gem 'capybara'
   gem 'launchy'
   gem 'faker'
   gem 'factory_girl'
+  gem 'webmock'
+  gem 'timecop'
 end

@@ -2,10 +2,39 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   
+  context "Attempting to import history" do
+    setup do
+      stub_user_history('user_history_single_lesson')
+    end
+    
+    context "mindbodyonline username missing" do
+      setup do
+        @user = Factory.create(:user, :mindbodyonline_user => '')
+        @user.fetch_lesson_history        
+      end
+
+      should "not create any lessons" do
+        assert_equal(0, @user.lessons.count)
+      end
+    end
+    
+    context "mindbodyonline password missing" do
+      setup do
+        @user = Factory.create(:user, :mindbodyonline_pw => '')
+        @user.fetch_lesson_history        
+      end
+
+      should "not create any lessons" do
+        assert_equal(0, @user.lessons.count)
+      end
+    end
+  end
+  
+  
   context "Importing a single lesson" do
     setup do            
       stub_user_history('user_history_single_lesson')
-      @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
+      @user = Factory.create(:user)
       @user.fetch_lesson_history
     end
     
@@ -29,7 +58,7 @@ class UserTest < ActiveSupport::TestCase
   context "Importing entire user history" do
     setup do
       stub_user_history('user_history')
-      @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
+      @user = Factory.create(:user)
       @user.fetch_lesson_history
     end
   
@@ -68,7 +97,7 @@ class UserTest < ActiveSupport::TestCase
   context "Fetching user history from mindbodyonline.com" do
     setup do      
       stub_user_history('user_history')
-      @user = User.create(:mindbodyonline_user => "user", :mindbodyonline_pw => "pass")
+      @user = Factory.create(:user)
       @user.fetch_lesson_history
     end
   
@@ -77,35 +106,4 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
-  private
-  
-  def import_html(filename)
-    return File.read(File.join(File.expand_path('../../test/fixtures/html_content'), "#{filename}.html"))
-  end
-  
-  def html_body(filename)
-    {
-      :body => import_html(filename),
-      :headers => { "Content-Type" => "text/html" }
-    }
-  end
-  
-  def stub_user_history(user_history_filename)
-    # stub home page
-    stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
-      html_body('app_index')
-    )
-    
-    # stub session creation post
-    stub_request(:post, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134")
-    
-    # stub logging in
-    stub_request(:post, "https://clients.mindbodyonline.com/ASP/login_p.asp")
-    
-    # stub getting user history
-    stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
-      html_body(user_history_filename)
-    )
-  end
-
 end

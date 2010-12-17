@@ -14,11 +14,29 @@
 
   <p><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></p>
-
+  
   <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
   <%= f.password_field :current_password %></p>
 
   <p><%= f.submit "Update" %></p>
+
+  <h3>Online booking credentials</h3>
+  
+  <p>We collect your Yoga class history from <a href="clients.mindbodyonline.com/ASP/home.asp?studioid=1134">http://clients.mindbodyonline.com/ASP/home.asp?studioid=1134</a> so we need to have the username and password which you use to log in to book classes online.</p>
+  
+  <p>It is highly recommended to not use a password which you use on regularly because it will be without encyption by our website. This is the only way we can use your username and password when collecting you data.</p>
+  
+  <p><%= f.label :mindbodyonline_user, "Yoga username" %><br />
+  <%= f.text_field :mindbodyonline_user %></p>
+  
+  <p><%= f.label :mindbodyonline_pw, "Yoga password" %><br />
+  <%= f.password_field :mindbodyonline_pw %></p>
+  
+  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <%= f.password_field :current_password %></p>
+
+  <p><%= f.submit "Update" %></p>
+  
 <% end %>
 
 <h3>Cancel my account</h3>

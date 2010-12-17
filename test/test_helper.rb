@@ -10,8 +10,72 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   fixtures :all
+  
+  def teardown
+    Timecop.return
+  end
 
   # Add more helper methods to be used by all tests here...
+
+  def sign_up(attributes)
+    attributes.reverse_merge!(Factory.attributes_for(:user))
+
+    visit '/users/sign_up'    
+    fill_in 'Username', :with => attributes[:username]
+    fill_in 'Email', :with => attributes[:email]
+    fill_in 'Password', :with => attributes[:password]
+    fill_in 'Password confirmation', :with => attributes[:password]
+    click_button 'Sign up'
+    
+    return User.find_by_username(attributes[:username])
+  end
+  
+  def sign_in(attributes)
+    attributes.reverse_merge!(Factory.attributes_for(:user))
+
+    visit '/users/sign_in'
+    fill_in 'Username', :with => attributes[:username]
+    fill_in 'Password', :with => attributes[:password]
+    click_button 'Sign in'
+    
+    return User.find_by_username(attributes[:username])
+  end
+  
+  def sign_out
+    visit '/users/sign_out'
+  end
+  
+  # IMPORTING DATA
+  
+  def import_html(filename)
+    return File.read(File.join(Rails.root, 'test/fixtures/html_content', "#{filename}.html"))
+  end
+  
+  def html_body(filename)
+    {
+      :body => import_html(filename),
+      :headers => { "Content-Type" => "text/html" }
+    }
+  end
+  
+  def stub_user_history(user_history_filename)
+    # stub home page
+    stub_request(:get, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134").to_return(
+      html_body('app_index')
+    )
+    
+    # stub session creation post
+    stub_request(:post, "https://clients.mindbodyonline.com/ASP/home.asp?studioid=1134")
+    
+    # stub logging in
+    stub_request(:post, "https://clients.mindbodyonline.com/ASP/login_p.asp")
+    
+    # stub getting user history
+    stub_request(:get, "https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2").to_return(
+      html_body(user_history_filename)
+    )
+  end
+  
 end
 
 # Enable Capybara for integration tests

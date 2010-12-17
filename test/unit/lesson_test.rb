@@ -5,7 +5,7 @@ class LessonTest < ActiveSupport::TestCase
   context "Given an existing lesson" do
     setup do
       @time = Time.zone.now
-      @user = User.create!
+      @user = Factory.create(:user)
       @lesson = Lesson.create(:attended_at => @time, :user => @user)
     end
   
