@@ -39,6 +39,17 @@ class UserTest < ActiveSupport::TestCase
       assert_equal(1, Studio.count)
       assert_equal("Balham", Studio.first.name)
     end
+    
+    context "and attempting to re-import without any new lessons" do
+      setup do
+        @user.record_lessons(Nokogiri::HTML(import_html('entire_lesson_import')))
+      end
+
+      should "not record anymore lessons" do
+        assert_equal(127, @user.lessons.count)
+      end
+    end
+    
   end
   
   context "Fetching user history from mindbodyonline.com" do
