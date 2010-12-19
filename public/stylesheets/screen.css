@@ -10,8 +10,8 @@ body h4{font-size:1.5em;line-height:1em;margin-top:1em;margin-bottom:0em;}
 body h5{font-size:1.3333em;line-height:1.125em;margin-top:1.125em;margin-bottom:0em;}
 body h6{font-size:1.1667em;line-height:1.2857em;margin-top:1.2857em;margin-bottom:0em;}
 body p{font-size:1em;line-height:1.5em;margin:0 0 1.5em 0;}
-body .calendar{width:86em;border:1px solid #eee;margin:0 auto;}body .calendar h2{text-align:center;text-transform:uppercase;color:#aaa;}
-body .calendar ol li{float:left;display:block;width:10em;height:10em;}body .calendar ol li h3.date{font-size:3em;text-align:center;}
+body .calendar{width:80%;margin:0 auto;}body .calendar h2{text-align:center;text-transform:uppercase;color:#aaa;font-size:3em;}
+body .calendar ol{padding:0;}body .calendar ol li{background:#f4f4f4;float:left;display:block;width:30%;max-width:10em;height:10em;}body .calendar ol li h3.date{font-size:3em;text-align:center;}
 body .calendar ol li.attended h3.date{color:red;}
 body .calendar ol li.attended h3.teacher{font-size:1em;}
 body .calendar ol li.in_the_future h3.date{color:#eee;}
