@@ -8,7 +8,13 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :mindbodyonline_user, :mindbodyonline_pw
   
+  validates_presence_of :username, :on => :create, :message => "can't be blank"
+  
   has_many :lessons
+  
+  def to_param
+    self.username
+  end
 
   def fetch_lesson_history
     return if self.mindbodyonline_user.blank? || self.mindbodyonline_pw.blank?    

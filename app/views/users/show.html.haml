@@ -1,6 +1,9 @@
-%h1 
-  Yogi
-  =current_user.username.titlecase
+%h1
+  -if @user == current_user 
+    Namaste
+    =current_user.username.titlecase
+  -else
+    =@user.username
 
 .calendar
   %h2=@current_time.strftime("%B")
