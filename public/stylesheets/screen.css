@@ -27,7 +27,10 @@ body h4{font-size:1.5em;line-height:1em;margin-top:1em;margin-bottom:0em;}
 body h5{font-size:1.3333em;line-height:1.125em;margin-top:1.125em;margin-bottom:0em;}
 body h6{font-size:1.1667em;line-height:1.2857em;margin-top:1.2857em;margin-bottom:0em;}
 body p{font-size:1em;line-height:1.5em;margin:0 0 1.5em 0;}
-body .calendar h2{text-transform:uppercase;color:#aaa;font-size:3em;}
+body a{color:#903;text-decoration:none;}
+body a:hover,body a:focus{text-decoration:none;color:#990035;}
+body .calendar h2#current_date{color:#333;font-size:5em;text-transform:uppercase;text-align:center;margin:0;}
+body .calendar h2#current_date a{font-size:0.4em;}
 body .calendar ol li{background:#f4f4f4;float:left;display:block;width:10%;padding:2% 1.8em 4.8% 1.8em;border-top:1px solid #fff;border-bottom:1px solid #ddd;border-left:1px solid #eee;border-right:1px solid #e5e5e5;position:relative;}body .calendar ol li h3.date{font-size:3em;line-height:0.5em;text-align:center;color:#666;text-shadow:#fff 0px 1px 1px;}
 body .calendar ol li img{position:absolute;top:0;width:100%;left:0;margin:0;}
 body .calendar ol li .lesson{display:none;position:absolute;top:0;right:0;background:#eee;background-color:rgba(255, 255, 255, 0.7);width:100%;height:100%;}body .calendar ol li .lesson h3{margin-left:1em;}

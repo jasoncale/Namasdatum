@@ -68,5 +68,40 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
       end
     end
       
+  
+    context "at the present month" do
+      should "see link to previous month" do
+        assert page.has_css?('a.prev', :with => "November")
+      end
+      
+      should "not see link to next month as it is in the future" do
+        assert page.has_css?('a.next', :count => 0)
+      end
+      
+      context "clicking previous month" do
+        setup do
+          @lesson = Factory.create(:lesson, :user => @user, :attended_at => Time.local(2010, 11, 2, 10, 0, 0))
+          click_link 'November'
+        end
+
+        should "see link to previous month" do
+          assert page.has_css?('a.prev', :with => "October")
+        end
+
+        should "see link to next month" do
+          assert page.has_css?('a.next', :with => "December")
+        end
+        
+        should "see lesson in the previous month" do
+          within(".calendar ol") do
+            assert page.has_css?('li.attended', :count => 1)
+          end
+          
+          within(".calendar ol li.attended") do
+            assert page.has_css?('h3.date', :with => "2")
+          end
+        end
+      end
+    end
   end
 end

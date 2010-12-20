@@ -53,12 +53,33 @@ body {
     margin: 0 0 1.5em 0;
   }
   
+  a {
+    color: #903;
+    text-decoration: none;
+  }
+  
+  a:hover, a:focus {
+    text-decoration: none;
+    color: #990035;
+  }
+  
   .calendar {
         
-    h2 {
+    h2#current_date {
+      color: #333;
+      font-size: 5em;
       text-transform: uppercase;
-      color: #aaa;
-      font-size: 3em;
+      text-align: center;
+      margin: 0;
+      
+      span {
+
+      }
+      
+      a {
+        font-size: 0.4em;
+      }
+      
     }
     
     ol {
