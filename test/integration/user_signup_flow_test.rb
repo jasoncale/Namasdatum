@@ -8,7 +8,7 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
     end
     
     should "show their profile page" do
-      assert page.has_content?('John')
+      assert page.has_css?('.calendar')
     end
     
     should "create new user" do
@@ -25,7 +25,7 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
     end
 
     should "show their profile page" do
-      assert page.has_content?('John')
+      assert page.has_css?('.calendar')
     end
   end
     
