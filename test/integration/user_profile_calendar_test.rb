@@ -67,9 +67,17 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
         end        
       end
     end
-      
-  
+    
+    
+    
     context "at the present month" do
+      should "see marker for today" do
+        within(".calendar ol") do
+          assert page.has_css?('li.today', :count => 1)
+          assert page.has_css?('li.today h3', :with => "17")
+        end
+      end
+      
       should "see link to previous month" do
         assert page.has_css?('a.prev', :with => "November")
       end
@@ -82,6 +90,12 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
         setup do
           @lesson = Factory.create(:lesson, :user => @user, :attended_at => Time.local(2010, 11, 2, 10, 0, 0))
           click_link 'November'
+        end
+        
+        should "not seemarker for today" do
+          within(".calendar ol") do
+            assert page.has_css?('li.today', :count => 0)
+          end
         end
 
         should "see link to previous month" do
