@@ -6,12 +6,15 @@
       <!--[if gte IE 7]><!-->
         #{stylesheet_link_tag %w(screen)}    
       <!-- <![endif]-->
+      <!--[if lte IE 9]>
+        #{stylesheet_link_tag %w(ie)}
+      <![endif]-->
             
     = javascript_include_tag :defaults
     = csrf_meta_tag
 
   %body
-    #page
+    #page.container
       %p.notice=notice
       %p.alert=alert
     
