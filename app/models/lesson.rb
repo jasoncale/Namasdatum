@@ -6,7 +6,6 @@ class Lesson < ActiveRecord::Base
   validates_uniqueness_of :attended_at, :on => :create, :scope => :user_id, :message => "a user cannot attendee the same lesson twice"
   
   scope :in_month, lambda { |month, year|
-    #where("year(attended_at) = ? AND month(attended_at) = ?", year, month)
     where("EXTRACT(YEAR FROM lessons.attended_at) = ? AND EXTRACT(MONTH FROM lessons.attended_at) = ?", year, month)  
   }
 end
