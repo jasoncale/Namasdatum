@@ -11,9 +11,9 @@
       - lessons_on_this_day = @lessons.select{|lesson| lesson.attended_at.day == date }
       - css_classes = []      
       - css_classes << "attended" unless lessons_on_this_day.blank?
-      - css_classes << "in_the_future" if date > @current_time.day
-      - if (@display_time.year == @current_time.year && @display_time.month == @current_time.month) && date == @current_time.day
-        - css_classes << "today" 
+      - if (@display_time.year == @current_time.year && @display_time.month == @current_time.month) 
+        - css_classes << "in_the_future" if date > @current_time.day
+        - css_classes << "today" if date == @current_time.day
       
       %li{:class => css_classes }
         -if lessons_on_this_day.present?

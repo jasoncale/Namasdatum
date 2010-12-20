@@ -78,6 +78,13 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
         end
       end
       
+      should "see markers for days in the future" do
+        future_days = Time.days_in_month(@current_time.month) - @current_time.day 
+        within(".calendar ol") do
+          assert page.has_css?('li.in_the_future', :count => future_days)
+        end
+      end
+      
       should "see link to previous month" do
         assert page.has_css?('a.prev', :with => "November")
       end
@@ -95,6 +102,12 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
         should "not seemarker for today" do
           within(".calendar ol") do
             assert page.has_css?('li.today', :count => 0)
+          end
+        end
+
+        should "not see markers for days in the future" do
+          within(".calendar ol") do
+            assert page.has_css?('li.in_the_future', :count => 0)
           end
         end
 
