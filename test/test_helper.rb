@@ -30,6 +30,12 @@ class ActiveSupport::TestCase
     return User.find_by_username(attributes[:username])
   end
   
+  def sign_up_sign_out_sign_in(attributes)
+    sign_up(attributes)
+    sign_out
+    sign_in(attributes)
+  end
+  
   def sign_in(attributes)
     attributes.reverse_merge!(Factory.attributes_for(:user))
 

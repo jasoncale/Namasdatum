@@ -2,6 +2,8 @@
 %html
   %head
     %title Namasdatum
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"} 
+    
     :plain
       <!--[if gte IE 7]><!-->
         #{stylesheet_link_tag %w(screen)}    
@@ -9,14 +11,24 @@
       <!--[if lte IE 9]>
         #{stylesheet_link_tag %w(ie)}
       <![endif]-->
-            
-    = javascript_include_tag :defaults
+      
+    = javascript_include_tag 'jquery', :defaults
     = csrf_meta_tag
 
   %body
-    #page.container
-      %p.notice=notice
-      %p.alert=alert
+    #page
+      #header.container
+        -if user_signed_in?
+          %ul#main_nav.row
+            %li.eightcol
+              %h1=link_to 'Namasdatum', '/'
+            %li.twocol
+              %p=link_to 'Account', edit_user_registration_path
+            %li.twocol.last
+              %p=link_to 'Sign out', destroy_user_session_path
     
-      #content
+        %p.notice=notice
+        %p.alert=alert
+    
+      #content.container
         =yield

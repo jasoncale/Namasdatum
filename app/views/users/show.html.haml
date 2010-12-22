@@ -1,11 +1,11 @@
-.calendar.row
-  %h2#current_date
-    =link_to((@display_time - 1.month).strftime("%B"), user_path(@user, :month => (@display_time - 1.month).month, :year => (@display_time - 1.month).year), :class => 'prev')
-    %span.month=@display_time.strftime("%B")
+.calendar
+  %h2#current_date.row
+    =link_to((@display_time - 1.month).strftime("%B"), user_path(@user, :month => (@display_time - 1.month).month, :year => (@display_time - 1.month).year), :class => 'prev fourcol')
+    %span.fourcol.month=@display_time.strftime("%B")
     -if (@current_time > (@display_time + 1.month))
-      =link_to((@display_time + 1.month).strftime("%B"), user_path(@user, :month => (@display_time + 1.month).month, :year => (@display_time + 1.month).year), :class => 'next')
+      =link_to((@display_time + 1.month).strftime("%B"), user_path(@user, :month => (@display_time + 1.month).month, :year => (@display_time + 1.month).year), :class => 'next fourcol last')
   
-  %ol.group.twelvecol
+  %ol.group.row
     -Time.days_in_month(@display_time.month).times do |i|
       - date = i+1
       - lessons_on_this_day = @lessons.select{|lesson| lesson.attended_at.day == date }

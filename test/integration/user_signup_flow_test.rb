@@ -19,9 +19,7 @@ class UserSignupFlowTest < ActionDispatch::IntegrationTest
   
   context "Logging into an account" do
     setup do
-      sign_up(:username => 'john')
-      sign_out
-      sign_in(:username => 'john')
+      sign_up_sign_out_sign_in(:username => 'john')
     end
 
     should "show their profile page" do

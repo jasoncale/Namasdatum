@@ -106,4 +106,32 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
+  context "Username" do
+    setup do
+      @user = Factory.create(:user, :username => "Bobby")
+    end
+
+    should "be coverted to lowercase" do
+      assert_equal("bobby", @user.username)
+    end
+    
+    context "uniqueness" do
+      setup do
+        Factory.create(:user, :username => "Joe")      
+      end
+
+      should "be checked on creation" do
+        assert_raise(ActiveRecord::RecordInvalid) { Factory.create(:user, :username => "Joe") }
+      end
+      
+      should "be checked on update" do
+        @user = Factory.create(:user, :username => "Frank") 
+        @user.username = "Joe"
+        @user.save
+        
+        assert_equal "must be unique", @user.errors[:username].first        
+        assert_equal("frank", @user.reload.username)
+      end
+    end
+  end
 end

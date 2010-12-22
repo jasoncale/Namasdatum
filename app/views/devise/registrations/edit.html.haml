@@ -1,0 +1,61 @@
+.row  
+  .sixcol
+    %h2== Edit #{resource_name.to_s.humanize}
+  
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = devise_error_messages!
+  
+      %p
+        = f.label :username 
+        %br
+        = f.text_field :username
+  
+      %p
+        = f.label :email 
+        %br
+        = f.text_field :email
+
+      %p
+        = f.label :password
+        %em (leave blank if you don't want to change it)
+        %br
+        = f.password_field :password
+
+      %p
+        = f.label :password_confirmation 
+        %br
+        = f.password_field :password_confirmation
+  
+      %p= f.submit "Update"
+
+  .sixcol.last
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = devise_error_messages!
+
+      %h3 Online booking credentials
+
+      %p
+        We collect your Yoga class history from <a href="clients.mindbodyonline.com/ASP/home.asp?studioid=1134">http://clients.mindbodyonline.com/ASP/home.asp?studioid=1134</a> so we need to have the username and password which you use to log in to book classes online.</p>
+
+      %p
+        It is highly recommended to not use a password which you use on regularly because it will be without encyption by our website. This is the only way we can use your username and password when collecting you data.</p>
+
+      %p
+        = f.label :mindbodyonline_user, "Yoga username" 
+        %br
+        = f.text_field :mindbodyonline_user
+
+      %p
+        = f.label :mindbodyonline_pw, "Yoga password" 
+        %br
+        = f.password_field :mindbodyonline_pw
+
+      %p
+        = f.submit "Update"
+  
+.row
+  %h3 Cancel my account
+
+  %p==Unhappy? #{link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete}.
+
+  %p= link_to "Back", :back

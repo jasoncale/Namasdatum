@@ -68,8 +68,6 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
       end
     end
     
-    
-    
     context "at the present month" do
       should "see marker for today" do
         within(".calendar ol") do

@@ -8,12 +8,25 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :mindbodyonline_user, :mindbodyonline_pw
   
-  validates_presence_of :username, :on => :create, :message => "can't be blank"
+  validates_presence_of :username, :message => "can't be blank"
+  validates_uniqueness_of :username, :message => "must be unique"
   
   has_many :lessons
   
+  before_validation do
+    self.username = self.username.downcase if attribute_present?("username")
+  end
+    
   def to_param
     self.username
+  end
+  
+  def update_with_password(params={}) 
+    if params[:password].blank? 
+      params.delete(:password) 
+      params.delete(:password_confirmation) if params[:password_confirmation].blank? 
+    end 
+    update_attributes(params) 
   end
 
   def fetch_lesson_history
@@ -42,6 +55,8 @@ class User < ActiveRecord::Base
   
     return lessons_imported
   end
+    
+  private
   
   def record_lessons(document)
     rows = document.css("table tr")    
@@ -75,5 +90,5 @@ class User < ActiveRecord::Base
   
     return lessons_imported
   end
-
+  
 end
