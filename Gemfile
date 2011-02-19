@@ -9,6 +9,12 @@ gem 'devise'
 gem 'nokogiri'
 gem 'mechanize'
 
+group :development do
+  # for devise view generation
+  gem 'hpricot'
+  gem 'ruby_parser'
+end
+
 group :test do  
   gem 'shoulda'
   gem 'capybara'
