@@ -30,12 +30,11 @@ class GeneralLayoutTest < ActionDispatch::IntegrationTest
   context "when logged in" do
     setup do
       @frank = Factory.create(:user, :username => "frank", :password => "testing", :password_confirmation => "testing")
-      sign_in(:email => @frank.email, :password => "testing")
+      sign_in(:username => "frank", :password => "testing")
     end
     
     context "Primary navigation" do  
       should "have link to sign out" do
-        save_and_open_page
         assert page.has_css?('a[href*=sign_out]', :with => "Sign out")
       end
     end

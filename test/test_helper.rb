@@ -41,7 +41,7 @@ class ActiveSupport::TestCase
     
     visit '/'
     click_link 'Sign in'    
-    fill_in 'Email', :with => attributes[:email]
+    fill_in 'Username', :with => attributes[:username]
     fill_in 'Password', :with => attributes[:password]
     click_button 'Sign in'
     
@@ -83,6 +83,10 @@ class ActiveSupport::TestCase
     )
   end
   
+end
+
+class ActionController::TestCase
+  include Devise::TestHelpers
 end
 
 # Enable Capybara for integration tests

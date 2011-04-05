@@ -84,11 +84,11 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
       end
       
       should "see link to previous month" do
-        assert page.has_css?('a.prev', :with => "November")
+        assert page.has_css?('.prev a', :text => "November")
       end
       
       should "not see link to next month as it is in the future" do
-        assert page.has_css?('a.next', :count => 0)
+        assert page.has_css?('.next a', :count => 0)
       end
       
       context "clicking previous month" do
@@ -110,11 +110,11 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
         end
 
         should "see link to previous month" do
-          assert page.has_css?('a.prev', :with => "October")
+          assert page.has_css?('.prev a', :with => "October")
         end
 
         should "see link to next month" do
-          assert page.has_css?('a.next', :with => "December")
+          assert page.has_css?('.next a', :with => "December")
         end
         
         should "see lesson in the previous month" do
