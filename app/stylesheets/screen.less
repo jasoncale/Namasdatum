@@ -1,210 +1,146 @@
-@import "import/1140.less";
+@import "import/reset";
+@import "import/common";
 
-body {
+.gutter(10px);
+
+#page {
+  .span(10);
+  .inset > .margin(3);
   
-  font-size: 12px;
-  font-family: Helvetica, sans-serif;
   
-  h1 {
-    font-size: 2em; /* 24px */
-    line-height: 1.5em; /* 36px */
-    margin-top: 0.75em;
-    margin-bottom: 0em;
-  }
-
-  h2 {
-    font-size: 1.8333em; /* 22px */
-    line-height: 1.6364em; /* 36px */
-    margin-top: 0.8182em;
-    margin-bottom: 0em;
-  }
-
-  h3 {
-    font-size: 1.6667em; /* 20px */
-    line-height: 1.8em; /* 36px */
-    margin-top: 0.9em;
-    margin-bottom: 0em;
-  }
-
-  h4 {
-    font-size: 1.5em; /* 18px */
-    line-height: 1em; /* 18px */
-    margin-top: 1em;
-    margin-bottom: 0em;
-  }
-
-  h5 {
-    font-size: 1.3333em; /* 16px */
-    line-height: 1.125em; /* 18px */
-    margin-top: 1.125em;
-    margin-bottom: 0em;
-  }
-
-  h6 {
-    font-size: 1.1667em; /* 14px */
-    line-height: 1.2857em; /* 18px */
-    margin-top: 1.2857em;
-    margin-bottom: 0em;
-  }
-
-  p {
-    font-size: 1em; /* 12px */
-    line-height: 1.5em; /* 18px */
-    margin: 0 0 1.5em 0;
-  }
-  
-  a {
-    color: #903;
-    text-decoration: none;
-  }
-  
-  a:hover, a:focus {
-    text-decoration: none;
-    color: #990035;
-  }
-  
-}
-
-.container {
-}
-
-/*
-  MAIN NAVIGATION
-*/
-
-ul#main_nav {
-  list-style: none;
-  
-  li {    
-    
-    a {
-      text-transform: uppercase;
-      font-size: 0.8em;
-    }
-  }
-}
-  
-/*
-  USER PROFILE PAGE
-*/
-
-.calendar {
-      
-  h2#current_date {
-    color: #333;
+  h1#logo {
+    .inset > .gutter;
+    margin-bottom: 0.74em;
+    font-size: 3em;
+    line-height: 0.9em;
+    padding-top: 0.2em;
     text-transform: uppercase;
-    
-    span {
-      
-    }
-    
-    a {
-      font-size: 80%;
-    }
-    
+    float: left;
   }
   
-  ol {
+  #main_nav {
+    .group;
+    float: right;
 
     li {
-      background: #f4f4f4;
       float: left;
-      display: block;
-      width: 10%;
-      padding: 2% 1.8em 4.8% 1.8em;
-      border-top: 1px solid #fff;
-      border-bottom: 1px solid #ddd;
-      border-left: 1px solid #eee;
-      border-right: 1px solid #e5e5e5;
-      
+      .span(2, @gutter);
+    }
+  }
+  
+  .alert, .notice {
+    .span(4, @gutter);
+    clear: both;
+  }
+  
+  h2 {
+    text-transform: uppercase;
+  }
+}
+
+.stat {
+  .span(4, @gutter);
+  .group;
+  float: left;
+  border-bottom: 1px solid #eee;
+  margin-right: @gutter;
+  min-height: 6 * 20px;
+  h2 {
+    .span(4);
+  }
+  
+}
+
+.calendar {
+  
+  ol {
+    .span(4);
+        
+    li.date {
+      color: #ccc;
+      float: left;
+      display: block;      
       position: relative;
+      width: 12%;
+      padding: 5px 5px 0 5px;
+      border-bottom: 1px solid #ccc;
       
-      h3.date {
-        font-size: 3em;
-        line-height: 0.5em;
-        text-align: center;
-        color: #666;
-        text-shadow: #fff 0px 1px 1px;
-      }
-      
-      img {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        left: 0;
+      h3 {
         margin: 0;
+        text-align: right;        
       }
       
-      .lesson {
-        display: none;
+      .lessons {
+        .rounded;
+        background: #333;
+        bottom: 0;
+        left: 0;
         position: absolute;
-        top: 0;
-        right: 0;
-        background: #eee;
-        background-color: rgba(255,255,255,0.7);
-        width: 100%;
-        height: 100%;
+        z-index: 999;
+        opacity: 0;
         
-        h3 {
-          margin-left: 1em;
+        .transition(opacity);
+      
+        .lesson {
+          .span(2);
+          display: block;
+          padding: 0.5em;
+          h3 {
+            margin: 0;
+            font-size: 1.2em;
+            text-align: left;
+          }
+          
+          p.lesson_time {
+            margin: 0;
+            font-weight: normal;
+          }
+          
+          .lesson + .lesson {
+            border-top: 1px solid #ccc;
+          }
         }
-        
-        p {
-          margin-left: 1em;
+      }
+      
+      &:hover {
+        cursor: pointer;
+        .lessons {
+          opacity: 1;
         }
       }
     }
     
-    li:hover {
-      background: #f9f9f9;
-      
-      .lesson {
-        display: block;
-      }
-      
-    }
-    
-    li.attended {
-      h3.date {
-        text-shadow: none;
-      }
-      
-      h3.teacher {
-        font-size: 1em;
-      }
-    } 
-    
-    li.in_the_future {
-      h3.date {
-        color: #ccc;
-      }
+    #lessons-for-15 {
+      display: block;
     }
     
     li.today {
-      background: #fff;
+      color: #aaa;
     }
     
+    li.attended {
+    }
+    
+    li.in_the_future {
+    }
+  }
+  
+  .prev {
+    .span(2);
+    float: left;
+  }
+  
+  .next {
+    float: right;
   }
 }
 
-
-/* misc.
---------------------------------------------- */
-
-hr, .hide {
-	display: none;
-}
-
-a img {
-	border: none;
-}
-
-/* self-clear floats */
-
-.group:after {
-	content: ".";
+.value {
+  font-size: 4em;
+  font-weight: bold;
   display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
+}
+
+.user_session {
+  .span(10, @gutter);
 }

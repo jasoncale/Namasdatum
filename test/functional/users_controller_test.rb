@@ -11,8 +11,7 @@ class UsersControllerTest < ActionController::TestCase
     should "be successful" do
       assert_response :success
     end
-  end
-  
+  end  
   
   context "Attempting to view user profile that doesn't exist" do
     should "raise ActiveRecord::RecordNotFound which will invoke 404 in production" do

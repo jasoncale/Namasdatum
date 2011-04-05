@@ -1,0 +1,373 @@
+/* global variables.
+--------------------------------------------- */
+
+@col_width: 61px;
+@link_active: #FF0080;
+
+/* grid.
+--------------------------------------------- */
+
+.gutter(@value: 20px) {
+  @gutter: @value;
+}
+
+.span(@number: 1, @gutter: 0) {
+  width: (@number * @col_width) - @gutter;
+  padding-left: @gutter;
+}
+
+.column(@number: 1, @gutter: 0) {
+  float: left;
+  .span(@number, @gutter);
+}
+
+.inset {
+  .gutter {
+    padding-left: @gutter;
+  }
+  .margin(@number: 1) {
+    margin-left: (@number * @col_width);
+  }
+  .padding(@number: 1) {
+    padding-left: (@number * @col_width);
+  }
+}
+
+.column.one {
+  .column(1);
+}
+.column.two {
+  .column(2); 
+}
+.column.three {
+  .column(3);  
+}
+.column.four {
+  .column(4);
+}
+.column.five {
+  .column(5);
+}
+.column.six {
+  .column(6);
+}
+
+.column.one.gutter {
+  .gutter;
+  .column(1, @gutter);
+}
+.column.two.gutter {
+  .gutter;
+  .column(2, @gutter); 
+}
+.column.three.gutter {
+  .gutter;
+  .column(3, @gutter);  
+}
+.column.four.gutter {
+  .gutter;
+  .column(4, @gutter);
+}
+.column.five.gutter {
+  .gutter;
+  .column(5, @gutter);
+}
+.column.six.gutter {
+  .gutter;
+  .column(6, @gutter);
+}
+
+.span.one {
+  .span(1);
+}
+.span.two {
+  .span(2);
+}
+.span.three {
+  .span(3);
+}
+.span.four {
+  .span(4);
+}
+.span.five {
+  .span(5);
+}
+.span.six {
+  .span(6);
+}
+
+.span.one.gutter {
+  .gutter;
+  .span(1, @gutter);
+}
+.span.two.gutter {
+  .gutter;
+  .span(2, @gutter);
+}
+.span.three.gutter {
+  .gutter;
+  .span(3, @gutter);
+}
+.span.four.gutter {
+  .gutter;
+  .span(4, @gutter);
+}
+.span.five.gutter {
+  .gutter;
+  .span(5, @gutter);
+}
+.span.six.gutter {
+  .gutter;
+  .span(6, @gutter);
+}
+
+
+/* typography.
+--------------------------------------------- */
+
+body {
+  
+  font-family: "Myriad Pro", Arial, Helvetica, Tahoma, sans-serif;
+	font-size: 12px;
+	line-height: 1.6666666666666667em;
+	margin: 0; 
+	padding: 0;
+  
+  h1 {
+  	margin: 0;
+  	font-size: 1.6666666666666667em;
+  	line-height: 1em;
+  	margin-bottom: 1em;
+  }
+  h2 {
+  	margin: 0;
+  	font-size: 1.5em;
+  	line-height: 1.1111111111111112em;
+  	margin-bottom: 1.1111111111111112em;
+  }
+  h3 {
+  	margin: 0;
+  	font-size: 1.3333333333333333em;
+  	line-height: 1.25em;
+  	margin-bottom: 1.25em;
+  }
+  h4 {
+  	margin: 0;
+  	font-size: 1.1666666666666667em;
+  	line-height: 1.4285714285714286em;
+  	margin-bottom: 1.4285714285714286em;
+  }
+  p, ul, blockquote, pre, td, th, label {
+  	margin: 0;
+  	font-size: 1em;
+  	line-height: 1.6666666666666667em;
+  	margin-bottom: 1.6666666666666667em;
+  }
+  p.small {
+  	margin: 0;
+  	font-size: 0.8333333333333334em;
+  	line-height: 2em;
+  	margin-bottom: 2em;
+  }
+  table {
+  	border-collapse: collapse;
+  	margin-bottom: 1.6666666666666667em;
+  }
+  
+  a {
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  a:hover, a:focus {
+    text-decoration: none;
+    color: @link_active;
+  }
+  
+}
+
+
+/* forms.
+--------------------------------------------- */
+
+form {
+  margin: 0 0 2.2em 0;
+  padding-top: 1.1em;
+  width: 24.7em;
+
+  .group {
+    margin-bottom: 1.1em;
+  }
+  
+  .submit {
+    margin-top: 2.45em;
+    text-align: right;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #999;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    line-height: 2em;
+    padding-top: 0.35em;
+    display: block;
+  }
+  
+  input {
+    margin-top: 0.15em;
+    font-size: 1em;
+    line-height: 1.4em;
+    width: 20em;
+  }
+  
+  input[type=text], input[type=password], textarea {
+    background: #F5F5F5;
+    border-bottom: 1px solid #eee;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #e5e5e5;
+    border-top: 1px solid #ccc;
+    margin: 0;
+  }
+  
+  input[type=text], input[type=password] {
+    padding: 0em 0.2em;
+    line-height: 1.35em;
+    font-size: 1.4em;
+    width: 17.2em;  
+  }
+  
+  input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    background: #f9f9f9;
+    color: #222;
+  }
+  
+  input[type=submit] {
+    background: #eee;
+    padding: 0.5em 1em;
+    width: auto;
+    border: 1px solid #eee;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    text-transform: uppercase;
+    text-shadow: #f1f1f1 0px 1px 0;
+    color: #777;
+    margin: 0;
+  }
+
+  input[type=submit]:hover {
+    background: #ddd;
+    border: 1px solid #ddd;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  input[type=checkbox] {
+    width: 1em;
+    float: left;
+    height: 1em;
+  }
+  
+  input[type=checkbox] + label:hover, 
+  label.for-checkbox:hover {
+    color: #333;
+    cursor: pointer;
+  }
+  
+  input[type=checkbox], .chkbox input {
+    padding: 0;
+    margin: 0.5em 1em 0.7em 0;
+  }
+  
+  .buttons {
+    margin-top: 2.5em;  
+  }
+
+  .buttons input {
+    float: left;
+    margin-top: 0.3em;
+  }
+
+  .buttons p {
+    float: left;
+    line-height: 3.1em;
+    padding: 0;
+    margin: 0 0 0 1em;
+  }
+
+  .field_with_errors {
+    display: inline;
+  }
+
+  .field_with_errors:after {
+  	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  
+}  
+
+/* utils.
+--------------------------------------------- */
+
+.rounded(@amount: 5px) {
+  -moz-border-radius: 5px; /* FF1+ */
+  -webkit-border-radius: 5px; /* Saf3+, Chrome */
+  border-radius: 5px; /* Opera 10.5, IE 9 */
+}
+
+.rounded_specific(@topleft: 5px, @topright: 5px, @bottomright: 5px, @bottomleft: 5px) {
+  -moz-border-radius-topleft: @topleft;
+  -webkit-border-top-left-radius: @topleft;
+  border-top-left-radius: @topleft;
+  
+  -moz-border-radius-topright: @topright;
+  -webkit-border-top-right-radius: @topright;
+  border-top-right-radius: @topright;
+  
+  -moz-border-radius-bottomright: @bottomright;
+  -webkit-border-bottom-right-radius: @bottomright;
+  border-bottom-right-radius: @bottomright;
+  
+  -moz-border-radius-bottomleft: @bottomleft;
+  -webkit-border-bottom-left-radius: @bottomleft;
+  border-bottom-left-radius: @bottomleft;
+}
+
+.transition(@properties, @duration: 0.3s) {
+  -o-transition-property: @properties;
+  -o-transition-duration: @duration;
+  -moz-transition-property: @properties;
+  -moz-transition-duration: @duration;
+  -webkit-transition-property: @properties;
+  -webkit-transition-duration: @duration;
+}
+
+/* misc.
+--------------------------------------------- */
+
+hr, .hide {
+	display: none;
+}
+
+a img {
+	border: none;
+}
+
+/* self-clear floats */
+
+.group {
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}

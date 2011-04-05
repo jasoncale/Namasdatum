@@ -38,9 +38,10 @@ class ActiveSupport::TestCase
   
   def sign_in(attributes)
     attributes.reverse_merge!(Factory.attributes_for(:user))
-
-    visit '/users/sign_in'
-    fill_in 'Username', :with => attributes[:username]
+    
+    visit '/'
+    click_link 'Sign in'    
+    fill_in 'Email', :with => attributes[:email]
     fill_in 'Password', :with => attributes[:password]
     click_button 'Sign in'
     
@@ -48,7 +49,7 @@ class ActiveSupport::TestCase
   end
   
   def sign_out
-    visit '/users/sign_out'
+    click_link 'Sign out'
   end
   
   # IMPORTING DATA

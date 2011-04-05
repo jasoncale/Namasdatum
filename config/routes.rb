@@ -3,6 +3,8 @@ Namasdatum::Application.routes.draw do
   
   resources :lessons
   resources :users
+
+  match 'design-test' => 'pages#design'
   
   root :to => "pages#index"
 

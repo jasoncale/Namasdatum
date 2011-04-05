@@ -3,32 +3,30 @@
   %head
     %title Namasdatum
     %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"} 
-    
     :plain
       <!--[if gte IE 7]><!-->
-        #{stylesheet_link_tag %w(screen)}    
+        #{stylesheet_link_tag %w(screen)}
       <!-- <![endif]-->
       <!--[if lte IE 9]>
         #{stylesheet_link_tag %w(ie)}
       <![endif]-->
-      
-    = javascript_include_tag 'jquery', :defaults
-    = csrf_meta_tag
-
+    =stylesheet_link_tag %w(hashgrid)
+    =csrf_meta_tag
   %body
     #page
-      #header.container
-        -if user_signed_in?
-          %ul#main_nav.row
-            %li.eightcol
-              %h1=link_to 'Namasdatum', '/'
-            %li.twocol
+      #header.group
+        %h1#logo=link_to 'namasdatum', '/'      
+        %ul#main_nav
+          -if user_signed_in?
+            %li
               %p=link_to 'Account', edit_user_registration_path
-            %li.twocol.last
+            %li
               %p=link_to 'Sign out', destroy_user_session_path
-    
+          -else
+            %li=link_to 'Sign up', new_user_registration_path
+            %li=link_to 'Sign in', new_user_session_path
         %p.notice=notice
         %p.alert=alert
-    
-      #content.container
-        =yield
+      #content.group=yield
+    = javascript_include_tag 'jquery', :defaults
+    =javascript_include_tag 'hashgrid'

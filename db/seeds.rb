@@ -1,7 +1,18 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
-#   Mayor.create(:name => 'Daley', :city => cities.first)
+require 'factory_girl'
+require 'test/factories'
+
+config = (
+  config_path = File.read(File.dirname(__FILE__) + "/seeds.yml")
+  YAML.load(config_path)["config"]
+)
+
+jason = Factory.create(:user,
+  :username => 'jason',
+  :email => 'jason.cale@me.com',
+  :password => 'testing',
+  :password_confirmation => 'testing',
+  :mindbodyonline_user => config[:jason][:mindbodyonline_user],
+  :mindbodyonline_pw => config[:jason][:mindbodyonline_password]
+)
+
+jason.fetch_lesson_history

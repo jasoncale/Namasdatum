@@ -1,25 +1,72 @@
-.calendar
-  %h2#current_date.row
-    =link_to((@display_time - 1.month).strftime("%B"), user_path(@user, :month => (@display_time - 1.month).month, :year => (@display_time - 1.month).year), :class => 'prev fourcol')
-    %span.fourcol.month=@display_time.strftime("%B")
-    -if (@current_time > (@display_time + 1.month))
-      =link_to((@display_time + 1.month).strftime("%B"), user_path(@user, :month => (@display_time + 1.month).month, :year => (@display_time + 1.month).year), :class => 'next fourcol last')
-  
-  %ol.group.row
+.calendar.stat
+  %h2#current_date=@display_time.strftime("%B %Y")
+  %ol.group
     -Time.days_in_month(@display_time.month).times do |i|
       - date = i+1
       - lessons_on_this_day = @lessons.select{|lesson| lesson.attended_at.day == date }
-      - css_classes = []      
+      - css_classes = ["date"]      
       - css_classes << "attended" unless lessons_on_this_day.blank?
       - if (@display_time.year == @current_time.year && @display_time.month == @current_time.month) 
         - css_classes << "in_the_future" if date > @current_time.day
         - css_classes << "today" if date == @current_time.day
       
       %li{:class => css_classes }
-        -if lessons_on_this_day.present?
-          %img{:src => "/images/stamp.png"}
-        %h3.date=date
-        -lessons_on_this_day.each do |lesson|
-          .lesson
-            %h3.teacher=lesson.teacher.name
-            %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')
+        %h3.date
+          -if lessons_on_this_day.blank?
+            =date
+          -else
+            -lessons_id = "lessons-for-#{date}"
+            =link_to date, "##{lessons_id}"
+        %ul.lessons{:id => lessons_id}            
+          -lessons_on_this_day.each do |lesson|
+            %li.lesson
+              %h3.teacher=lesson.teacher.name
+              %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')
+  
+  -time = @display_time - 1.month         
+  %p.prev=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
+  
+  -if (@current_time > (@display_time + 1.month))
+    -time = @display_time + 1.month 
+    %p.next=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
+    
+.stat 
+  %h3.key Current streak
+  %p
+    %span.value 3 days
+
+.stat 
+  %h3.key 
+    Highest streak 
+    -if @current_time.month == @display_time.month
+      this month
+    -else
+      for
+      =@display_time.strftime("%B")
+  %p
+    %span.value 3 days
+  
+
+.stat 
+  %h3.key Highest streak ever
+  %p
+    %span.value 53 days
+
+    
+.stat 
+  %h3.key Most taught by
+  %p
+    %span.value Michael Eley
+    overall Clarissa Robertson
+    
+.stat 
+  %h3.key Most frequented day
+  %p
+    %span.value Monday
+    normally Wednesday
+
+.stat 
+  %h3.key Most frequented time to practice
+  %p
+    %span.value 8pm
+    normally 7pm
