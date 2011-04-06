@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101217153716) do
+ActiveRecord::Schema.define(:version => 20110406151608) do
 
   create_table "lessons", :force => true do |t|
     t.datetime "attended_at"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20101217153716) do
     t.integer  "teacher_id"
     t.integer  "studio_id"
     t.integer  "user_id"
+    t.boolean  "streak_recorded", :default => false
   end
 
   create_table "studios", :force => true do |t|
@@ -50,6 +51,12 @@ ActiveRecord::Schema.define(:version => 20101217153716) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
+    t.integer  "current_streak",                      :default => 0
+    t.date     "streak_start"
+    t.date     "streak_end"
+    t.integer  "longest_streak",                      :default => 0
+    t.date     "longest_streak_start"
+    t.date     "longest_streak_end"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -8,4 +8,14 @@ class Lesson < ActiveRecord::Base
   scope :in_month, lambda { |month, year|
     where("EXTRACT(YEAR FROM lessons.attended_at) = ? AND EXTRACT(MONTH FROM lessons.attended_at) = ?", year, month)  
   }
+  
+  scope :streak_recorded, where(:streak_recorded => true)
+  
+  def date
+    Time.zone.utc_to_local(self.attended_at).to_date
+  end
+  
+  def streak_recorded!
+    update_attribute(:streak_recorded, true)
+  end
 end

@@ -4,27 +4,28 @@
 .gutter(10px);
 
 #page {
-  .span(10);
+  .span(12);
   .inset > .margin(3);
-  
-  
+  position: relative;
+
   h1#logo {
     .inset > .gutter;
-    margin-bottom: 0.74em;
+    margin-bottom: 0;
     font-size: 3em;
-    line-height: 0.9em;
-    padding-top: 0.2em;
+    line-height: 0.87em;
+    padding-top: 0.4em;
     text-transform: uppercase;
-    float: left;
+    text-align: center;
   }
   
   #main_nav {
     .group;
-    float: right;
-
+    position: absolute;
+    top: 2.2em;
+    right: 0;
     li {
       float: left;
-      .span(2, @gutter);
+      .span(1, @gutter);
     }
   }
   

@@ -6,7 +6,9 @@ class User < ActiveRecord::Base
   devise :registerable, :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, :mindbodyonline_user, :mindbodyonline_pw
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :username, 
+    :mindbodyonline_user, :mindbodyonline_pw, :streak_start, :streak_end, :current_streak, 
+    :longest_streak, :longest_streak_start, :longest_streak_end
   
   validates_presence_of :username, :message => "can't be blank"
   validates_uniqueness_of :username, :message => "must be unique"
@@ -52,10 +54,62 @@ class User < ActiveRecord::Base
     agent.get("https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2") do |history_page|      
       lessons_imported = record_lessons(history_page.root)
     end
+    
+    if lessons_imported.length > 0
+      
+    end
   
     return lessons_imported
   end
     
+  def update_progress(imported_lessons, today = Date.today)
+    streaks = [current_streak = Streak.new(streak_start, streak_end)]
+
+    transaction do
+      streaks = scan_lessons_for_streaks(imported_lessons)
+      update_from_streaks(streaks, today)
+      save!
+    end
+  end
+  
+  def scan_lessons_for_streaks(imported_lessons)
+    days = imported_lessons.reject(&:streak_recorded).group_by(&:date).sort
+    streaks = [current_streak = Streak.new(streak_start, streak_end)]
+    
+    days.each do |date, lessons|      
+      if current_streak.current?(date)
+        current_streak.ended = date
+      else
+        streaks << (current_streak = Streak.new(date))
+      end
+      
+      lessons.each(&:streak_recorded!)
+    end
+    
+    streaks
+  end
+  
+  def update_from_streaks(streaks, today)  
+    highest_streak = streaks.empty? ? 0 : streaks.max { |a, b| a.days <=> b.days }
+    if latest_streak = streaks.last
+      self.streak_start   = latest_streak.started
+      self.streak_end     = latest_streak.ended
+      self.current_streak = latest_streak.current?(today) ? latest_streak.days : 0
+    end
+    if highest_streak.days > longest_streak.to_i
+      self.longest_streak       = highest_streak.days
+      self.longest_streak_start = highest_streak.started
+      self.longest_streak_end   = highest_streak.ended
+    end
+  end
+  
+  def clear_progress
+    update_attributes \
+      :streak_start => nil, :streak_end => nil, :current_streak => nil,
+      :longest_streak => nil, :longest_streak_start => nil, :longest_streak_end => nil
+    lessons.streak_recorded.update_all(:streak_recorded => false)
+  end
+        
   private
   
   def record_lessons(document)

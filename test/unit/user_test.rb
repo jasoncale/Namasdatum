@@ -30,7 +30,6 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
-  
   context "Importing a single lesson" do
     setup do            
       stub_user_history('user_history_single_lesson')
@@ -132,6 +131,111 @@ class UserTest < ActiveSupport::TestCase
         assert_equal "must be unique", @user.errors[:username].first        
         assert_equal("frank", @user.reload.username)
       end
+    end
+  end
+
+  context "Given a user who has attended class for last 3 days" do
+    setup do
+      @user = Factory.create(:user)
+      streak_for @user, 3.days
+      @user.update_progress(@user.lessons)
+    end
+
+    should "calculate current streak length as 3 days" do
+      assert_equal(3, @user.current_streak)
+    end
+    
+    context "a day goes by and the user doesn't practice" do
+      setup do
+        # move forward two days to ensure 
+        # that no practice could have happened
+        Timecop.travel(Time.zone.now + 1.days)
+        
+        @user.update_progress(@user.lessons)
+      end
+    
+      should "calculate current streak length as 0" do
+        assert_equal(0, @user.current_streak)
+      end
+    end
+  end
+  
+  context "Given a user who practices every day over 7 days" do
+    setup do
+      @user = Factory.create(:user)
+      streak_for @user, 7.days
+      @user.update_progress(@user.lessons)
+    end
+    
+    should "calculate current streak length as 7" do
+      assert_equal(7, @user.current_streak)
+    end
+    
+    should "have 7 recorded lessons" do
+      assert_equal(7, @user.lessons.streak_recorded.count)
+    end
+  
+    context "with a double included" do
+      setup do
+        # do the 3pm class as well as 10am
+        attend_class_time(@user, 1.day.ago, 15)
+        @user.update_progress(@user.lessons)
+      end
+  
+      should "calculate current streak length as 7" do
+        assert_equal(7, @user.current_streak)
+      end
+      
+      should "have 8 recorded lessons" do
+        assert_equal(8, @user.lessons.streak_recorded.count)
+      end
+    end
+  end
+  
+  context "Given a user who practices over 7 days missing day but who does a double" do
+    setup do
+      @user = Factory.create(:user)
+      streak_for @user, 7.days
+      
+      # remove 3rd day
+      @user.lessons[2].destroy
+      
+      # double on 5th day
+      attend_class_time(@user, 2.days.ago, 15)
+      
+      @user.update_progress(@user.lessons.reload)
+    end
+  
+    should "calculate current streak length as 7" do
+      assert_equal(7, @user.current_streak)
+    end
+  end
+  # 
+  #   
+  # context "praciticing with two missing days in one week two doubles" do
+  #   setup do
+  #     
+  #   end
+  #   
+  #   context "on day 8" do
+  #     setup do
+  #       
+  #     end
+  # 
+  #     should "calculate current streak length as 0" do
+  #       assert_equal(0, @user.current_streak)
+  #     end
+  #   end
+  # end
+  
+  def attend_class_time(user, date = Time.zone.now, hour = 10)
+    class_time = Time.utc(date.year, date.month, date.day, 10)
+    user.lessons.create(:attended_at => class_time)
+  end
+  
+  def streak_for(user, length_in_days = 1.day)
+    (length_in_days / 1.day).times do |x|
+      attend_class_time(user, (x + 1).days.ago)
     end
   end
 end

@@ -57,9 +57,9 @@ form .field_with_errors:after{content:".";display:block;height:0;clear:both;visi
 hr,.hide{display:none;}
 a img{border:none;}
 .group:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
-#page{width:610px;padding-left:0;margin-left:183px;}#page h1#logo{padding-left:10px;margin-bottom:0.74em;font-size:3em;line-height:0.9em;padding-top:0.2em;text-transform:uppercase;float:left;}
-#page #main_nav{float:right;}#page #main_nav:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
-#page #main_nav li{float:left;width:112px;padding-left:10px;}
+#page{width:732px;padding-left:0;margin-left:183px;position:relative;}#page h1#logo{padding-left:10px;margin-bottom:0;font-size:3em;line-height:0.87em;padding-top:0.4em;text-transform:uppercase;text-align:center;}
+#page #main_nav{position:absolute;top:2.2em;right:0;}#page #main_nav:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+#page #main_nav li{float:left;width:51px;padding-left:10px;}
 #page .alert,#page .notice{width:234px;padding-left:10px;clear:both;}
 #page h2{text-transform:uppercase;}
 .stat{width:234px;padding-left:10px;float:left;border-bottom:1px solid #eee;margin-right:10px;min-height:120px;}.stat:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
