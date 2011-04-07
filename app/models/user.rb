@@ -55,9 +55,9 @@ class User < ActiveRecord::Base
       lessons_imported = record_lessons(history_page.root)
     end
     
-    if lessons_imported.length > 0
-      
-    end
+    # if lessons_imported.length > 0
+    #   update_progress(lessons_imported)
+    # end
   
     return lessons_imported
   end
@@ -66,27 +66,33 @@ class User < ActiveRecord::Base
     streaks = [current_streak = Streak.new(streak_start, streak_end)]
 
     transaction do
-      streaks = scan_lessons_for_streaks(imported_lessons)
+      lessons_for_consideration = imported_lessons.reject(&:streak_recorded)
+      streaks = scan_lessons_for_streaks(lessons_for_consideration)
       update_from_streaks(streaks, today)
+      lessons_for_consideration.each(&:streak_recorded!)
       save!
     end
   end
   
   def scan_lessons_for_streaks(imported_lessons)
-    days = imported_lessons.reject(&:streak_recorded).group_by(&:date).sort
+    days = imported_lessons.group_by(&:date).sort
     streaks = [current_streak = Streak.new(streak_start, streak_end)]
     
-    days.each do |date, lessons|      
+    days.each do |date, lessons|
+      current_streak.double_on(date) if lessons.count > 1
+      
       if current_streak.current?(date)
         current_streak.ended = date
       else
         streaks << (current_streak = Streak.new(date))
-      end
-      
-      lessons.each(&:streak_recorded!)
+      end      
     end
     
     streaks
+  end
+  
+  def streaks_between(from, to)
+    scan_lessons_for_streaks(lessons.where('attended_at BETWEEN ? AND ?', from, to))    
   end
   
   def update_from_streaks(streaks, today)  

@@ -83,6 +83,17 @@ class ActiveSupport::TestCase
     )
   end
   
+  def attend_class_time(user, date = Time.zone.now, hour = 10)
+    class_time = Time.utc(date.year, date.month, date.day, hour)
+    user.lessons.create(:attended_at => class_time)
+  end
+
+  def streak_for(user, length_in_days = 1.day)
+    (length_in_days / 1.day).times do |x|
+      attend_class_time(user, (x + 1).days.ago)
+    end
+  end
+
 end
 
 class ActionController::TestCase

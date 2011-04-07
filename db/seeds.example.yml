@@ -1,0 +1,4 @@
+config:
+  :jason:
+    :mindbodyonline_user: 'xxx'
+    :mindbodyonline_password: 'xxx'

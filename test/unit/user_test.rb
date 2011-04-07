@@ -192,7 +192,7 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
-  context "Given a user who practices over 7 days missing day but who does a double" do
+  context "Given a user who practices over 7 days missing a day has done a double" do
     setup do
       @user = Factory.create(:user)
       streak_for @user, 7.days
@@ -200,42 +200,50 @@ class UserTest < ActiveSupport::TestCase
       # remove 3rd day
       @user.lessons[2].destroy
       
-      # double on 5th day
+      # double on the 5th day
       attend_class_time(@user, 2.days.ago, 15)
       
-      @user.update_progress(@user.lessons.reload)
+      @user.lessons.reload
+      @user.update_progress(@user.lessons)  
     end
-  
-    should "calculate current streak length as 7" do
+    
+    should "have 7 lessons recorded" do
+      assert_equal(7, @user.lessons.count)
+    end
+
+    should "currently streak length of 7" do
       assert_equal(7, @user.current_streak)
     end
   end
-  # 
-  #   
-  # context "praciticing with two missing days in one week two doubles" do
-  #   setup do
-  #     
-  #   end
-  #   
-  #   context "on day 8" do
-  #     setup do
-  #       
-  #     end
-  # 
-  #     should "calculate current streak length as 0" do
-  #       assert_equal(0, @user.current_streak)
-  #     end
-  #   end
-  # end
   
-  def attend_class_time(user, date = Time.zone.now, hour = 10)
-    class_time = Time.utc(date.year, date.month, date.day, 10)
-    user.lessons.create(:attended_at => class_time)
-  end
-  
-  def streak_for(user, length_in_days = 1.day)
-    (length_in_days / 1.day).times do |x|
-      attend_class_time(user, (x + 1).days.ago)
+    
+  context "praciticing with two missing days in one week two doubles" do
+    setup do
+      @user = Factory.create(:user)
+      streak_for @user, 7.days
+      
+      # remove 2rd & 4th day
+      @user.lessons[1].destroy
+      @user.lessons[3].destroy
+
+      # double on the 3rd & 5th day
+      attend_class_time(@user, 5.days.ago, 15)
+      attend_class_time(@user, 3.days.ago, 15)
+      
+      @user.lessons.reload
+      @user.update_progress(@user.lessons)
+    end
+    
+    should "have a practiced yesterday" do
+      assert_equal Date.yesterday, @user.lessons.order(:attended_at).last.attended_at.to_date
+    end
+    
+    should "have 7 lessons recorded" do
+      assert_equal(7, @user.lessons.count)
+    end
+
+    should "currently streak length of 1" do
+      assert_equal(1, @user.current_streak)
     end
   end
 end
