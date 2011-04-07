@@ -62,7 +62,7 @@ a img{border:none;}
 #page #main_nav li{float:left;width:51px;padding-left:10px;}
 #page .alert,#page .notice{width:234px;padding-left:10px;clear:both;}
 #page h2{text-transform:uppercase;}
-.stat{width:234px;padding-left:10px;float:left;border-bottom:1px solid #eee;margin-right:10px;min-height:120px;}.stat:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.stat{width:234px;padding-left:10px;float:left;margin-right:10px;min-height:120px;}.stat:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
 .stat h2{width:244px;padding-left:0;}
 .calendar ol{width:244px;padding-left:0;}.calendar ol li.date{color:#ccc;float:left;display:block;position:relative;width:12%;padding:5px 5px 0 5px;border-bottom:1px solid #ccc;}.calendar ol li.date h3{margin:0;text-align:right;}
 .calendar ol li.date .lessons{-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background:#333;bottom:0;left:0;position:absolute;z-index:999;opacity:0;-o-transition-property:opacity;-o-transition-duration:0.3s;-moz-transition-property:opacity;-moz-transition-duration:0.3s;-webkit-transition-property:opacity;-webkit-transition-duration:0.3s;}.calendar ol li.date .lessons .lesson{width:122px;padding-left:0;display:block;padding:0.5em;}.calendar ol li.date .lessons .lesson h3{margin:0;font-size:1.2em;text-align:left;}
@@ -71,7 +71,7 @@ a img{border:none;}
 .calendar ol li.date:hover{cursor:pointer;}.calendar ol li.date:hover .lessons{opacity:1;}
 .calendar ol #lessons-for-15{display:block;}
 .calendar ol li.today{color:#aaa;}
-.calendar .prev{width:122px;padding-left:0;float:left;}
-.calendar .next{float:right;}
+.calendar .prev{width:122px;padding-left:0;float:left;padding-top:0.95em;}
+.calendar .next{float:right;padding-top:0.95em;}
 .value{font-size:4em;font-weight:bold;display:block;}
 .user_session{width:600px;padding-left:10px;}
