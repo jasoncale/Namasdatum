@@ -55,9 +55,9 @@ class User < ActiveRecord::Base
       lessons_imported = record_lessons(history_page.root)
     end
     
-    # if lessons_imported.length > 0
-    #   update_progress(lessons_imported)
-    # end
+    if lessons_imported.length > 0
+      update_progress(lessons_imported)
+    end
   
     return lessons_imported
   end
@@ -140,14 +140,19 @@ class User < ActiveRecord::Base
              :studio => Studio.find_or_create_by_name(studio)
            })       
            
-           lessons_imported << lesson if lesson.valid?     
+           if lesson.valid?
+             lessons_imported << lesson
+           end     
          rescue ArgumentError => e
            p "Import caused error #{e}"
          end        
        end
       end  
+      
+      # purge any failed lessons
+      lessons.reload
     end    
-  
+      
     return lessons_imported
   end
   

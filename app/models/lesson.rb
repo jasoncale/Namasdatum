@@ -10,6 +10,7 @@ class Lesson < ActiveRecord::Base
   }
   
   scope :streak_recorded, where(:streak_recorded => true)
+  scope :no_streak_recorded, where(:streak_recorded => false)
   
   def date
     Time.zone.utc_to_local(self.attended_at).to_date

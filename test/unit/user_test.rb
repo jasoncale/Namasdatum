@@ -72,7 +72,11 @@ class UserTest < ActiveSupport::TestCase
     
     context "and attempting to re-import without any new lessons" do
       setup do
-        @user.fetch_lesson_history
+        @imported = @user.fetch_lesson_history
+      end
+  
+      should "return an empty array for imported lessons" do
+        assert_equal(0, @imported.length)
       end
   
       should "not record anymore lessons" do
@@ -80,12 +84,16 @@ class UserTest < ActiveSupport::TestCase
       end
     end
     
-    context "and attempting to re-import without any new lessons" do
+    context "and attempting to re-import with any new lessons" do
       setup do
         stub_user_history('user_history_with_new_lesson')
-        @user.fetch_lesson_history
+        @imported = @user.fetch_lesson_history
       end
   
+      should "return array of imported lessons" do
+        assert_equal(1, @imported.length)
+      end
+      
       should "record just the new lesson" do
         assert_equal(129, @user.lessons.count)
       end
@@ -97,11 +105,19 @@ class UserTest < ActiveSupport::TestCase
     setup do      
       stub_user_history('user_history')
       @user = Factory.create(:user)
-      @user.fetch_lesson_history
+      @imported = @user.fetch_lesson_history
     end
-  
+    
+    should "return array of imported lessons" do
+      assert_equal(128, @imported.length)
+    end
+    
     should "fetch the users entire lesson history" do
       assert_equal(128, @user.lessons.count)
+    end
+    
+    should "set the highest streak to 30 days" do
+      assert_equal 30, @user.longest_streak
     end
   end
   
