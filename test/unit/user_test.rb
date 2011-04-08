@@ -195,7 +195,7 @@ class UserTest < ActiveSupport::TestCase
       setup do
         # do the 3pm class as well as 10am
         attend_class_time(@user, 1.day.ago, 15)
-        @user.update_progress(@user.lessons)
+        @user.update_progress(@user.lessons.reload)
       end
   
       should "calculate current streak length as 7" do
@@ -231,7 +231,6 @@ class UserTest < ActiveSupport::TestCase
       assert_equal(7, @user.current_streak)
     end
   end
-  
     
   context "praciticing with two missing days in one week two doubles" do
     setup do

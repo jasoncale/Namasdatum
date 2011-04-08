@@ -33,12 +33,12 @@
 .stat 
   %h3.key Current streak
   %p
-    %span.value= pluralize(@user.current_streak, "day")
+    %span#current-streak.value= pluralize(@user.current_streak, "day")
   
 .stat 
   %h3.key Highest streak ever
   %p
-    %span.value= pluralize(@user.longest_streak, "day")
+    %span#longest-streak.value= pluralize(@user.longest_streak, "day")
 
 /    
   .stat 

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UserProfileCalendarTest < ActionDispatch::IntegrationTest
+class UserProfileTest < ActionDispatch::IntegrationTest
   
   context "User profile calendar" do
     setup do
@@ -129,4 +129,39 @@ class UserProfileCalendarTest < ActionDispatch::IntegrationTest
       end
     end
   end
+
+  context "User streaks" do
+    setup do
+      @user = sign_up(:username => "Kevin")
+      visit user_path(@user)
+    end
+    
+    should "mark highest streak as zero" do
+      assert page.has_css?("#longest-streak", :with => "0")      
+    end
+    
+    should "mark current streak as zero" do
+      assert page.has_css?("#current-streak", :with => "0")
+    end
+    
+    context "for 7 days" do
+      setup do
+        streak_for @user, 7.days
+        @user.update_progress(@user.lessons)
+        
+        visit user_path(@user)
+      end
+
+      should "display current streak as 7 days" do
+        assert page.has_css?("#current-streak", :with => "7")
+      end
+      
+      should "display highest streak as 7 days" do
+        assert page.has_css?("#current-streak", :with => "7")
+      end
+    end
+  end
+  
+  
+  
 end

@@ -16,7 +16,7 @@ class Achievement < ActiveRecord::Base
     def process_for(user)
       all.select do |achievement|
         achievement_conditions[achievement.name].call(user)
-      end      
+      end 
     end
   end  
 end
