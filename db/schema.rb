@@ -10,7 +10,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110406151608) do
+ActiveRecord::Schema.define(:version => 20110408120724) do
+
+  create_table "achievements", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "achievements_users", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "achievement_id"
+  end
+
+  add_index "achievements_users", ["achievement_id"], :name => "index_achievements_users_on_achievement_id"
+  add_index "achievements_users", ["user_id"], :name => "index_achievements_users_on_user_id"
 
   create_table "lessons", :force => true do |t|
     t.datetime "attended_at"
@@ -21,6 +36,10 @@ ActiveRecord::Schema.define(:version => 20110406151608) do
     t.integer  "user_id"
     t.boolean  "streak_recorded", :default => false
   end
+
+  add_index "lessons", ["studio_id"], :name => "index_lessons_on_studio_id"
+  add_index "lessons", ["teacher_id"], :name => "index_lessons_on_teacher_id"
+  add_index "lessons", ["user_id"], :name => "index_lessons_on_user_id"
 
   create_table "studios", :force => true do |t|
     t.string   "name"

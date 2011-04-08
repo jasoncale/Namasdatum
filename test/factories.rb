@@ -24,3 +24,8 @@ Factory.define(:lesson) do |f|
   f.association :user
   f.association :teacher
 end
+
+Factory.define(:achievement) do |f|
+  f.name { "30 Day Challenge" }
+  f.description { Faker::Company.catch_phrase }
+end
