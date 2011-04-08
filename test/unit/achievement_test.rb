@@ -6,10 +6,6 @@ class AchievementTest < ActiveSupport::TestCase
     setup do
       @user = Factory.create(:user)
     end
-
-    should "have no achievements" do
-      assert_equal 0, @user.achievements.count
-    end
     
     context "who does 30 straight days of yoga" do
       setup do
