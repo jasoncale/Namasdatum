@@ -4,10 +4,10 @@ class Achievement < ActiveRecord::Base
   @achievement_conditions = {
     "30 Day Challenge" => Proc.new { |user| user.longest_streak >= 30 },
     "60 Day Challenge" => Proc.new { |user| user.longest_streak >= 60 },
-    "90 Day Challenge" => Proc.new { |user| user.longest_streak >= 60 },
+    "90 Day Challenge" => Proc.new { |user| user.longest_streak >= 90 },
     "101 Day Challenge" => Proc.new { |user| user.longest_streak >= 101 },
     "Six Month Challenge" => Proc.new { |user| user.longest_streak >= 180 },
-    "365 Day Challenge" => Proc.new { |user| user.longest_streak >= 30 }
+    "365 Day Challenge" => Proc.new { |user| user.longest_streak >= 365 }
   }
   
   class << self    
