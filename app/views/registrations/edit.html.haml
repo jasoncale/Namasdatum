@@ -50,6 +50,15 @@
 
   %p
     = f.submit "Update"
+    
+%h3 Foursquare Auto Checkin
+
+%p You can auto-checkin every time you visit class, just connect your account to foursquare and we'll do the rest: 
+
+- if current_user.foursquare_access_token.present?
+  %p Unlink your account
+- else
+  = link_to image_tag("connect.png"), @authorize_url
   
 
 %h3 Cancel my account

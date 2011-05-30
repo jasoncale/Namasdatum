@@ -1,3 +1,5 @@
+require 'foursquare'
+
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
@@ -7,13 +9,14 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username, 
     :mindbodyonline_user, :mindbodyonline_pw, :streak_start, :streak_end, :current_streak, 
-    :longest_streak, :longest_streak_start, :longest_streak_end
+    :longest_streak, :longest_streak_start, :longest_streak_end, :foursquare_access_token
   
   validates_presence_of :username, :message => "can't be blank"
   validates_uniqueness_of :username, :message => "must be unique"
 
   include User::History      
   include User::Stats
+  include User::AutoCheckin      
 
   has_many :lessons
   has_and_belongs_to_many :achievements

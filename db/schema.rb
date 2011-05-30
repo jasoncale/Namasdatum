@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110408120724) do
+ActiveRecord::Schema.define(:version => 20110530225230) do
 
   create_table "achievements", :force => true do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20110408120724) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "foursquare_venue_id"
   end
 
   create_table "teachers", :force => true do |t|
@@ -54,13 +55,13 @@ ActiveRecord::Schema.define(:version => 20110408120724) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                               :default => "", :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "", :null => false
-    t.string   "password_salt",                       :default => "", :null => false
+    t.string   "email",                                  :default => "", :null => false
+    t.string   "encrypted_password",      :limit => 128, :default => "", :null => false
+    t.string   "password_salt",                          :default => "", :null => false
     t.string   "reset_password_token"
     t.string   "remember_token"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                       :default => 0
+    t.integer  "sign_in_count",                          :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -70,12 +71,13 @@ ActiveRecord::Schema.define(:version => 20110408120724) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
-    t.integer  "current_streak",                      :default => 0
+    t.integer  "current_streak",                         :default => 0
     t.date     "streak_start"
     t.date     "streak_end"
-    t.integer  "longest_streak",                      :default => 0
+    t.integer  "longest_streak",                         :default => 0
     t.date     "longest_streak_start"
     t.date     "longest_streak_end"
+    t.string   "foursquare_access_token"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

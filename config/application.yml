@@ -1,0 +1,12 @@
+defaults: &defaults
+  foursquare_app_id: <%= ENV['ND_4SQ_APP_ID'] %>
+  foursquare_app_secret: <%= ENV['ND_4SQ_APP_SECRET'] %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

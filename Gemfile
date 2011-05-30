@@ -24,3 +24,8 @@ group :test do
   gem 'webmock'
   gem 'timecop'
 end
+
+gem "settingslogic"
+gem "json"
+gem "typhoeus"
+gem "quimby"
