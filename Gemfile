@@ -23,6 +23,7 @@ group :test do
   gem 'factory_girl'
   gem 'webmock'
   gem 'timecop'
+  gem 'mocha'
 end
 
 gem "settingslogic"

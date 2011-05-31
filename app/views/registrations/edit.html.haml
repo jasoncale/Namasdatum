@@ -56,9 +56,13 @@
 %p You can auto-checkin every time you visit class, just connect your account to foursquare and we'll do the rest: 
 
 - if current_user.foursquare_access_token.present?
-  %p Unlink your account
+  %p 
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = f.hidden_field :foursquare_access_token, :value => nil
+      = f.submit "Unlink your account", :id => "unlink_foursquare"
+
 - else
-  = link_to image_tag("connect.png"), @authorize_url
+  = link_to image_tag("connect.png"), @authorize_url, :id => "foursquare_connect"
   
 
 %h3 Cancel my account

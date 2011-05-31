@@ -37,4 +37,18 @@ class User < ActiveRecord::Base
     update_attributes(params) 
   end
   
+  def process_data
+    lessons_imported = fetch_lesson_history
+    
+    if lessons_imported.present?
+      # calculate stats
+      update_progress(lessons_imported)
+      
+      # auto foursquare checkin
+      attempt_auto_checkin
+    end
+  
+    return lessons_imported
+  end
+  
 end

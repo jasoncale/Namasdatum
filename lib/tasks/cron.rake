@@ -4,7 +4,7 @@ task :cron => :environment do
  # if Time.now.hour % 4 == 0 # run every four hours
    puts "Grabbing lesson data for each user."
    User.all.each do |user|
-     user.fetch_lesson_history
+     user.process_data
    end
    puts "Done."
  # end

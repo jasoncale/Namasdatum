@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/test_unit'
 require 'factories'
+require 'mocha'
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.
@@ -83,15 +84,19 @@ class ActiveSupport::TestCase
     )
   end
   
-  def attend_class_time(user, date = Time.zone.now, hour = 10)
-    class_time = Time.utc(date.year, date.month, date.day, hour)    
-    Factory.create(:lesson, :attended_at => class_time, :user => user)
+  def attend_class_time(user, date = Time.zone.now, hour = 10, studio = default_studio)
+    class_time = Time.utc(date.year, date.month, date.day, hour)
+    Factory.create(:lesson, :attended_at => class_time, :user => user, :studio => studio)
   end
 
   def streak_for(user, length_in_days = 1.day)
     (length_in_days / 1.day).times do |x|
       attend_class_time(user, (x + 1).days.ago)
     end
+  end
+  
+  def default_studio
+    @default_studio ||= Studio.find_or_create_by_name("Balham")
   end
 
 end

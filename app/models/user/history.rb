@@ -27,16 +27,6 @@ module User::History
         lessons_imported = record_lessons(history_page.root)
       end
 
-      if lessons_imported.length > 0
-        update_progress(lessons_imported)
-        
-        # any lessons for today?
-        practiced_today = lessons_imported.select {|lesson| lesson.attended_at.today? }
-        if practiced_today.length > 0
-          auto_checkin_for(practiced_today)
-        end
-      end
-
       return lessons_imported
     end
 

@@ -3,10 +3,12 @@ defaults: &defaults
   foursquare_app_secret: <%= ENV['ND_4SQ_APP_SECRET'] %>
 
 development:
-  <<: *defaults
-
+  foursquare_app_id: GSYCV05RW0RM2MRQHRF33RML11XX2JAA1GDU1MDV1XZUWE3O
+  foursquare_app_secret: QQCLNYX2CUVZ1GQ2IOZFKQSSRMG3F3YXNDDQ5DY0XQVZ5HYY
+  
 test:
-  <<: *defaults
+  foursquare_app_id: <%= ENV['ND_4SQ_APP_ID'] %>
+  foursquare_app_secret: <%= ENV['ND_4SQ_APP_SECRET'] %>
 
 production:
   <<: *defaults

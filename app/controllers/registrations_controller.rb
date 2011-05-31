@@ -2,11 +2,11 @@ require 'foursquare'
 
 class RegistrationsController < Devise::RegistrationsController
   
-  before_filter :authenticate_user!, :only => [:foursquare_callback]
+  before_filter :authenticate_user!, :only => [:foursquare_callback, :unlink_foursquare]
   
   def edit
     unless current_user && current_user.foursquare_access_token.present?
-      @authorize_url = foursquare.authorize_url(foursquare_callback_url)    
+      @authorize_url = foursquare.authorize_url(foursquare_callback_url)
     end
   end
   
