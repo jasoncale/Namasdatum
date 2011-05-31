@@ -262,81 +262,90 @@ class UserTest < ActiveSupport::TestCase
     end
   end
   
-  context "User with foursquare access token" do
-    setup do
+  context "Foursquare auto checkins" do
+    setup do      
       @balham = Factory.create(:studio, :name => "Balham", :foursquare_venue_id => "VENUE_BALHAM")
       @fulham = Factory.create(:studio, :name => "Fulham", :foursquare_venue_id => "VENUE_FULHAM")
-      
-      @user = Factory.create(:user, :foursquare_access_token => "ABC")
-      
-      @checkin_proxy = mock()
-      @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([])
-      
-      Foursquare::Base.any_instance.stubs(:checkins).returns(@checkin_proxy)
     end
     
-    context "class a single studio" do
-      setup do        
-        attend_class_time(@user, Date.today, 15)
-        @checkin_proxy.expects(:create).with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
-      end
-
-      should "record a checkin" do
-        assert_equal 1, @user.attempt_auto_checkin.count
-      end
-    end
-    
-    context "two classes at a single studio" do
+    context "User with foursquare access token" do
       setup do
-        attend_class_time(@user, Date.today, 10)
-        attend_class_time(@user, Date.today, 15)
-            
-        @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+        @user = Factory.create(:user, :foursquare_access_token => "ABC")
+        @checkin_proxy = mock()
+        @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([])
+        Foursquare::Base.any_instance.stubs(:checkins).returns(@checkin_proxy)
       end
 
-      should "only record a single checkin" do      
-        assert_equal 1, @user.attempt_auto_checkin.count
+      context "class a single studio" do
+        setup do        
+          attend_class_time(@user, Date.today, 15)
+          @checkin_proxy.expects(:create).with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+        end
+
+        should "record a checkin" do
+          assert_equal 1, @user.attempt_auto_checkin.count
+        end
+      end
+
+      context "two classes at a single studio" do
+        setup do
+          attend_class_time(@user, Date.today, 10)
+          attend_class_time(@user, Date.today, 15)
+
+          @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+        end
+
+        should "only record a single checkin" do      
+          assert_equal 1, @user.attempt_auto_checkin.count
+        end
+      end
+
+      context "two classes, different studios" do
+        setup do
+          attend_class_time(@user, Date.today, 10, @balham)
+          attend_class_time(@user, Date.today, 15, @fulham)
+
+          @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+          @checkin_proxy.expects(:create).once.with({:venueId => @fulham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+        end
+
+        should "record a two checkins" do      
+          assert_equal 2, @user.attempt_auto_checkin.count
+        end
       end
     end
     
-    context "two classes, different studios" do
+    context "User with foursquare access token who has already manually checked in to studio" do
       setup do
-        attend_class_time(@user, Date.today, 10, @balham)
-        attend_class_time(@user, Date.today, 15, @fulham)
-
-        @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
-        @checkin_proxy.expects(:create).once.with({:venueId => @fulham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+        @user = Factory.create(:user, :foursquare_access_token => "ABC")
+        
+        foursquare = Foursquare::Base.new(@user.foursquare_access_token)
+        checkin = Foursquare::Checkin.new(foursquare, {})
+        venue = Foursquare::Venue.new(foursquare, {'id' => @balham.foursquare_venue_id})    
+        checkin.stubs(:venue => venue)
+        
+        @checkin_proxy = mock()
+        @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([checkin])        
+        Foursquare::Base.any_instance.stubs(:checkins).returns(@checkin_proxy)
+    
+        attend_class_time(@user, Date.today, 15)
+      end
+    
+      should "not create a checkin" do
+        assert_equal 0, @user.attempt_auto_checkin.count
+      end
+    end
+    
+    context "User without foursqaure access token" do
+      setup do
+        @user = Factory.create(:user)
+        attend_class_time(@user, Date.today, 15)
       end
 
-      should "record a two checkins" do      
-        assert_equal 2, @user.attempt_auto_checkin.count
+      should "not create a checkin" do
+        assert_nil @user.foursquare_access_token
+        assert_equal 0, @user.attempt_auto_checkin.count
       end
     end
   end
-  
-  # context "User without foursqaure access token" do
-  #   setup do
-  #     attend_class_time(@user, Date.today, 15)
-  #     
-  #   end
-  # 
-  #   should "description" do
-  #     
-  #   end
-  # end
-
-  # context "already manually checked in to studio" do
-  #   setup do
-  #     @balham_checkin = mock()
-  #     @balham_checkin.stubs(:venue => mock().stubs(:id => @balham.foursquare_venue_id))
-  #     @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([@balham_checkin])
-  # 
-  #     attend_class_time(@user, Date.today, 15)
-  #   end
-  # 
-  #   should "not create a checkin" do
-  #     assert_equal 0, @user.attempt_auto_checkin.count
-  #   end
-  # end
-
 end
