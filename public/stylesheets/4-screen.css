@@ -1,0 +1,24 @@
+body #header {
+  margin-bottom: 24px;
+  padding-top: 10px; }
+  body #header a {
+    text-decoration: none; }
+  body #header #app-nav {
+    margin-bottom: 0; }
+    body #header #app-nav li {
+      padding-top: 20px;
+      margin-bottom: 0; }
+body .calendar ol {
+  margin-left: 0;
+  list-style: none; }
+  body .calendar ol li.date {
+    float: left;
+    width: 10%;
+    padding: 0 5px;
+    border: 1px solid #333;
+    margin-left: -1px;
+    text-align: center; }
+    body .calendar ol li.date .lessons {
+      display: none; }
+  body .calendar ol li.attended {
+    background: #eee; }

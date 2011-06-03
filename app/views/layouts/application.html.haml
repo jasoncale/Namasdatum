@@ -1,32 +1,42 @@
-!!! 5
-%html
+<!doctype html>
+/[if lt IE 7 ] <html class="ie ie6" lang="en">
+/[if IE 7 ] <html class="ie ie7" lang="en">
+/[if IE 8 ] <html class="ie ie8" lang="en">
+/ [if (gte IE 9)|!(IE)]><!
+%html{:lang => "en"}
+  / <![endif]
   %head
-    %title Namasdatum
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0"} 
-    :plain
-      <!--[if gte IE 7]><!-->
-        #{stylesheet_link_tag %w(screen)}
-      <!-- <![endif]-->
-      <!--[if lte IE 9]>
-        #{stylesheet_link_tag %w(ie)}
-      <![endif]-->
-    =stylesheet_link_tag %w(hashgrid)
-    =csrf_meta_tag
+    %meta{:charset => "utf-8"}
+    %title NAMASDATUM :: 
+    %meta{:content => "", :name => "description"}
+    %meta{:content => "", :name => "author"}
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1", :name => "viewport"}
+    =stylesheet_link_tag :all
+    
+    %link{:href => "images/favicon.ico", :rel => "shortcut icon"}
+    %link{:href => "images/apple-touch-icon.png", :rel => "apple-touch-icon"}
+    %link{:href => "images/apple-touch-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}
+    %link{:href => "images/apple-touch-icon-114x114.png", :rel => "apple-touch-icon", :sizes => "114x114"}
   %body
-    #page
-      #header.group
-        %h1#logo=link_to 'namasdatum', '/'      
-        %ul#main_nav
-          -if user_signed_in?
-            %li
-              %p=link_to 'Account', edit_user_registration_path
-            %li
-              %p=link_to 'Sign out', destroy_user_session_path
-          -else
-            %li=link_to 'Sign up', new_user_registration_path
-            %li=link_to 'Sign in', new_user_session_path
-        %p.notice=notice
-        %p.alert=alert
-      #content.group=yield
-    = javascript_include_tag 'jquery', :defaults
-    =javascript_include_tag 'hashgrid'
+    .container
+      #header.sixteen.columns
+        %h1#logo.ten.alpha.columns=link_to 'Namasdatum', '/' 
+        -if user_signed_in?
+          %ul#app-nav.six.columns.omega
+            %li.three.columns.alpha
+              =link_to 'Account', edit_user_registration_path
+            %li.three.columns.omega
+              =link_to 'Sign out', destroy_user_session_path
+      
+      -if notice || alert      
+        .sixteen.columns
+          -if notice
+            %p.notice=notice
+          -if alert
+            %p.alert=alert
+
+      =yield
+    
+    =javascript_include_tag :all

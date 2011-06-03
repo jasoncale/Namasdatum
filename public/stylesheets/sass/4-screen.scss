@@ -1,0 +1,43 @@
+body {
+  #header {
+    margin-bottom: 24px;
+    padding-top: 10px;
+    
+    a {
+      text-decoration: none;
+    }
+    
+    #app-nav {
+      margin-bottom: 0;
+      
+      li {
+        padding-top: 20px;
+        margin-bottom: 0;
+      }
+    }
+    
+  }
+  
+  .calendar {
+    ol {
+      margin-left: 0;
+      list-style: none;
+      li.date {
+        float: left;
+        width: 10%;
+        padding: 0 5px;
+        border: 1px solid #333;
+        margin-left: -1px;
+        text-align: center;
+        .lessons {
+          display: none;
+        }
+      }
+      
+      li.attended {
+        background: #eee;
+      }
+    }
+  }
+  
+}

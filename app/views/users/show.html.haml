@@ -1,6 +1,6 @@
-.calendar.stat
+.calendar.sixteen.columns
   %h2#current_date=@display_time.strftime("%B %Y")
-  %ol.group
+  %ol.clearfix
     -Time.days_in_month(@display_time.month).times do |i|
       - date = i+1
       - lessons_on_this_day = @lessons.select{|lesson| lesson.attended_at.day == date }
@@ -24,18 +24,18 @@
               %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')
   
   -time = @display_time - 1.month         
-  %p.prev=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
+  %p.five.columns.alpha.prev=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
   
   -if (@current_time > (@display_time + 1.month))
     -time = @display_time + 1.month 
-    %p.next=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
+    %p.five.columns.omega.next=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
     
-.stat 
+.three.columns
   %h3.key Current streak
   %p
     %span#current-streak.value= pluralize(@user.current_streak, "day")
   
-.stat 
+.three.columns
   %h3.key Highest streak ever
   %p
     %span#longest-streak.value= pluralize(@user.longest_streak, "day")
