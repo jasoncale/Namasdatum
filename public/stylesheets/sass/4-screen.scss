@@ -18,6 +18,7 @@ body {
   }
   
   .calendar {
+    position: relative;
     ol {
       margin-left: 0;
       list-style: none;
@@ -28,8 +29,37 @@ body {
         border: 1px solid #333;
         margin-left: -1px;
         text-align: center;
+        
         .lessons {
           display: none;
+        }
+        
+        &:hover {
+          background: #ddd;
+          ul.lessons {
+            z-index: 1000;
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 50%;
+            background: #eee;
+            padding: 6px 0 6px 12px;
+            margin: 0 0 0 -100px;
+            text-align: left;
+            width: 200px;
+            border: 4px solid #ddd;
+            
+            li {
+              padding: 0;
+              margin: 0;
+              h3, p {
+                font-size: 14px;
+                line-height: 21px;
+                padding: 0;
+                margin: 0;
+              }
+            }
+          }
         }
       }
       

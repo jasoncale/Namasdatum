@@ -10,19 +10,17 @@
         - css_classes << "in_the_future" if date > @current_time.day
         - css_classes << "today" if date == @current_time.day
       
-      %li{:class => css_classes }
-        %h3.date
-          -if lessons_on_this_day.blank?
-            =date
-          -else
-            -lessons_id = "lessons-for-#{date}"
-            =link_to date, "##{lessons_id}"
-        %ul.lessons{:id => lessons_id}            
-          -lessons_on_this_day.each do |lesson|
-            %li.lesson
-              %h3.teacher=lesson.teacher.name
-              %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')
-  
+      %li{:class => css_classes }            
+        -if lessons_on_this_day.present?
+          -lessons_id = "lessons-for-#{date}"
+          %h3.date=link_to date, "##{lessons_id}"
+          %ul.lessons{:id => lessons_id}            
+            -lessons_on_this_day.each do |lesson|
+              %li.lesson
+                %h3.teacher=lesson.teacher.name
+                %p.lesson_time=lesson.attended_at.strftime('%H:%M %p')
+        -else
+          %h3.date=date
   -time = @display_time - 1.month         
   %p.five.columns.alpha.prev=link_to time.strftime("%B"), user_path(@user, :month => time.month, :year => time.year)
   
