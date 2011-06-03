@@ -3,6 +3,11 @@ body #header {
   padding-top: 10px; }
   body #header a {
     text-decoration: none; }
+  body #header #logo {
+    margin-bottom: 30px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -1px;
+    font-weight: bold; }
   body #header #app-nav {
     margin-bottom: 0; }
     body #header #app-nav li {
