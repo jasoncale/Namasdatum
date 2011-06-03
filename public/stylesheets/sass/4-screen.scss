@@ -15,7 +15,6 @@ body {
         margin-bottom: 0;
       }
     }
-    
   }
   
   .calendar {
@@ -36,6 +35,15 @@ body {
       
       li.attended {
         background: #eee;
+      }
+    }
+  }
+  
+  form {
+    label {
+      em {
+        font-weight: normal;
+        font-size: 0.85em;
       }
     }
   }

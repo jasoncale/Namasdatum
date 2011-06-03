@@ -1,72 +1,62 @@
-%h2== Edit #{resource_name.to_s.humanize}
-
-= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
-  = devise_error_messages!
-
-  %p
-    = f.label :username 
-    %br
-    = f.text_field :username
-
-  %p
-    = f.label :email 
-    %br
-    = f.text_field :email
-
-  %p
-    = f.label :password
-    %em (leave blank if you don't want to change it)
-    %br
-    = f.password_field :password
-
-  %p
-    = f.label :password_confirmation 
-    %br
-    = f.password_field :password_confirmation
-
-  %p= f.submit "Update"
-
-  
-= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
-  = devise_error_messages!
-
-  %h3 Online booking credentials
-
-  %p
-    We collect your Yoga class history from <a href="clients.mindbodyonline.com/ASP/home.asp?studioid=1134">http://clients.mindbodyonline.com/ASP/home.asp?studioid=1134</a> so we need to have the username and password which you use to log in to book classes online.</p>
-
-  %p
-    It is highly recommended to not use a password which you use on regularly because it will be without encyption by our website. This is the only way we can use your username and password when collecting your data (you will have to change the password on the yoga booking site first).</p>
-
-  %p
-    = f.label :mindbodyonline_user, "Yoga username" 
-    %br
-    = f.text_field :mindbodyonline_user
-
-  %p
-    = f.label :mindbodyonline_pw, "Yoga password" 
-    %br
-    = f.password_field :mindbodyonline_pw
-
-  %p
-    = f.submit "Update"
+.sixteen.columns
+  .eight.columns.alpha
+    %h2 Your Account
     
-%h3 Foursquare Auto Checkin
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = devise_error_messages!
+      = f.label :username 
+      = f.text_field :username
 
-%p You can auto-checkin every time you visit class, just connect your account to foursquare and we'll do the rest: 
+      = f.label :email 
+      = f.text_field :email
 
-- if current_user.foursquare_access_token.present?
-  %p 
+      %label{:for => "user_password"} 
+        Password
+        %em (leave blank if you don't want to change it)
+      = f.password_field :password
+
+      = f.label :password_confirmation 
+      = f.password_field :password_confirmation
+
+      = f.submit "Update"
+
+
+  .eight.columns.omega
+    %h3 Online booking credentials
+      
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = devise_error_messages!
+
+      %p
+        We collect your Yoga class history from <a href="clients.mindbodyonline.com/ASP/home.asp?studioid=1134">http://clients.mindbodyonline.com/ASP/home.asp?studioid=1134</a> so we need to have the username and password which you use to log in to book classes online.</p>
+
+      %p
+        It is highly recommended to not use a password which you use on regularly because it will be without encyption by our website. This is the only way we can use your username and password when collecting your data (you will have to change the password on the yoga booking site first).</p>
+
+    
+      = f.label :mindbodyonline_user, "Yoga username" 
+      = f.text_field :mindbodyonline_user
+
+      = f.label :mindbodyonline_pw, "Yoga password" 
+      = f.password_field :mindbodyonline_pw
+
+      = f.submit "Update"
+    
+  %h3 Foursquare Auto Checkin
+
+  %p You can auto-checkin every time you visit class, just connect your account to foursquare and we'll do the rest: 
+
+  - if current_user.foursquare_access_token.present?
     = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
       = f.hidden_field :foursquare_access_token, :value => nil
       = f.submit "Unlink your account", :id => "unlink_foursquare"
 
-- else
-  = link_to image_tag("connect.png"), @authorize_url, :id => "foursquare_connect"
+  - else
+    %p= link_to image_tag("connect.png"), @authorize_url, :id => "foursquare_connect"
   
+  %hr
+  %h3 Cancel my account
 
-%h3 Cancel my account
+  %p==Unhappy? #{link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete}.
 
-%p==Unhappy? #{link_to "Cancel my account", registration_path(resource_name), :confirm => "Are you sure?", :method => :delete}.
-
-%p= link_to "Back", :back
+  %p= link_to "Back", :back

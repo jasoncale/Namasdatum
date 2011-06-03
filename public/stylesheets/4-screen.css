@@ -22,3 +22,6 @@ body .calendar ol {
       display: none; }
   body .calendar ol li.attended {
     background: #eee; }
+body form label em {
+  font-weight: normal;
+  font-size: 0.85em; }
