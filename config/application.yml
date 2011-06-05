@@ -1,14 +1,17 @@
 defaults: &defaults
   foursquare_app_id: <%= ENV['ND_4SQ_APP_ID'] %>
   foursquare_app_secret: <%= ENV['ND_4SQ_APP_SECRET'] %>
-
+  gowalla_app_api_key: <%= ENV['ND_GOWALLA_APP_API_KEY'] %>
+  gowalla_app_secret: <%= ENV['ND_GOWALLA_APP_SECRET'] %>
+  
 development:
   foursquare_app_id: GSYCV05RW0RM2MRQHRF33RML11XX2JAA1GDU1MDV1XZUWE3O
   foursquare_app_secret: QQCLNYX2CUVZ1GQ2IOZFKQSSRMG3F3YXNDDQ5DY0XQVZ5HYY
+  gowalla_app_api_key: 0ba0e062d3b442f28149c83d706dd766
+  gowalla_app_secret: 7540f82c9b8941688320f6ccd7872a26
   
 test:
-  foursquare_app_id: <%= ENV['ND_4SQ_APP_ID'] %>
-  foursquare_app_secret: <%= ENV['ND_4SQ_APP_SECRET'] %>
+  <<: *defaults
 
 production:
   <<: *defaults

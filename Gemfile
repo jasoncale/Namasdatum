@@ -11,6 +11,7 @@ gem "settingslogic"
 gem "json"
 gem "typhoeus"
 gem "quimby"
+gem "gowalla"
 
 group :development do
   # for devise view generation

@@ -1,7 +1,6 @@
 require 'test_helper'
 
-class UsersControllerTest < ActionController::TestCase
-  
+class UsersControllerTest < ActionController::TestCase  
   context "Visiting user profile" do
     setup do
       @user = Factory.create(:user, :username => "kevin")

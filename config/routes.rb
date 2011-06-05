@@ -3,6 +3,7 @@ Namasdatum::Application.routes.draw do
   
   as :user do
     get "foursquare_callback", :to => "registrations#foursquare_callback"
+    get "gowalla_callback", :to => "registrations#gowalla_callback"
   end
   
   resources :lessons

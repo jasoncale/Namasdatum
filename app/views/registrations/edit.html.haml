@@ -42,17 +42,26 @@
 
       = f.submit "Update"
     
-  %h3 Foursquare Auto Checkin
+  %h3 Auto Checkin to Foursquare and Gowalla
 
-  %p You can auto-checkin every time you visit class, just connect your account to foursquare and we'll do the rest: 
+  %p You can auto-checkin every time you visit class, just connect your account to foursquare, or gowalla (or both!) and we'll do the rest: 
 
   - if current_user.foursquare_access_token.present?
     = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
       = f.hidden_field :foursquare_access_token, :value => nil
-      = f.submit "Unlink your account", :id => "unlink_foursquare"
+      = f.submit "Unlink your foursquare account", :id => "unlink_foursquare"
 
   - else
-    %p= link_to image_tag("connect.png"), @authorize_url, :id => "foursquare_connect"
+    %p= link_to image_tag("foursquare-connect.png"), @foursquare_auth_url, :id => "foursquare_connect"
+
+  - if current_user.gowalla_access_token.present?
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
+      = f.hidden_field :gowalla_access_token, :value => nil
+      = f.submit "Unlink your gowalla account", :id => "unlink_gowalla"
+
+  - else
+    %p= link_to image_tag("gowalla-connect.png"), @gowalla_auth_url, :id => "gowalla_connect"
+
   
   %hr
   %h3 Cancel my account
