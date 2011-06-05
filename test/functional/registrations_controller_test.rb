@@ -12,7 +12,7 @@ class RegistrationsControllerTest < ActionController::TestCase
       sign_in @user
     end
 
-    context "recieving callback from gowalla" do
+    context "receiving callback from gowalla" do
       setup do        
         @oauth_token_expires_at = Time.now.utc + 2.weeks
         stub_request(:post, "https://gowalla.com/api/oauth/token").to_return(:status => 200, :body => {
@@ -36,5 +36,18 @@ class RegistrationsControllerTest < ActionController::TestCase
         assert_equal @oauth_token_expires_at.to_i, @user.gowalla_access_token_expires_at.to_i
       end
     end
+    
+    context "receiving callback from foursquare" do
+      setup do
+        Foursquare::Base.any_instance.stubs(:access_token).returns("oauth-token")
+        get :foursquare_callback, :code => "foursquare-originated-code"
+        @user.reload
+      end
+
+      should "update the foursquare access token" do
+        assert_equal "oauth-token", @user.foursquare_access_token
+      end
+    end
+  
   end  
 end
