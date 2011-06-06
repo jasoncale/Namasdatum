@@ -22,7 +22,8 @@ class RegistrationsController < Devise::RegistrationsController
       current_user.update_attributes({
         :gowalla_access_token            => access_token.token,
         :gowalla_refresh_token           => access_token.refresh_token,
-        :gowalla_access_token_expires_at => access_token.expires_at
+        :gowalla_access_token_expires_at => access_token.expires_at,
+        :gowalla_username                => access_token['username']
       })
     end
     redirect_to edit_user_registration_path

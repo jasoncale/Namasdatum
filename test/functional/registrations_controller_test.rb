@@ -18,7 +18,8 @@ class RegistrationsControllerTest < ActionController::TestCase
         stub_request(:post, "https://gowalla.com/api/oauth/token").to_return(:status => 200, :body => {
           :access_token => "oauth-token",
           :refresh_token => "refresh-token",
-          :expires_in => 2.weeks.to_i
+          :expires_in => 2.weeks.to_i,
+          :username => "gowalla-user"
         }.to_json, :headers => {})
         get :gowalla_callback, :state => 1, :code => "gowalla-originated-code"
         @user.reload
@@ -34,6 +35,10 @@ class RegistrationsControllerTest < ActionController::TestCase
       
       should "set the gowalla token expires date" do
         assert_equal @oauth_token_expires_at.to_i, @user.gowalla_access_token_expires_at.to_i
+      end
+      
+      should "set the gowalla username" do
+        assert_equal("gowalla-user", @user.gowalla_username)
       end
     end
     

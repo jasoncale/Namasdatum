@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me, :username, 
     :mindbodyonline_user, :mindbodyonline_pw, :streak_start, :streak_end, :current_streak, 
     :longest_streak, :longest_streak_start, :longest_streak_end, :foursquare_access_token, 
-    :gowalla_access_token, :gowalla_refresh_token, :gowalla_access_token_expires_at
+    :gowalla_access_token, :gowalla_refresh_token, :gowalla_access_token_expires_at,
+    :gowalla_username
   
   validates_presence_of :username, :message => "can't be blank"
   validates_uniqueness_of :username, :message => "must be unique"
