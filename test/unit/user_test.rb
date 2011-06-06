@@ -261,7 +261,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal(1, @user.current_streak)
     end
   end
-  
+    
   context "Foursquare auto checkins" do
     setup do      
       @balham = Factory.create(:studio, :name => "Balham", :foursquare_venue_id => "VENUE_BALHAM")
@@ -271,19 +271,16 @@ class UserTest < ActiveSupport::TestCase
     context "User with foursquare access token" do
       setup do
         @user = Factory.create(:user, :foursquare_access_token => "ABC")
-        @checkin_proxy = mock()
-        @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([])
-        Foursquare::Base.any_instance.stubs(:checkins).returns(@checkin_proxy)
       end
 
       context "class a single studio" do
         setup do        
           attend_class_time(@user, Date.today, 15)
-          @checkin_proxy.expects(:create).with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+          stub_foursquare_checkin_for(@balham)
         end
 
         should "record a checkin" do
-          assert_equal 1, @user.attempt_auto_checkin.count
+          assert_equal 1, @user.process_geo_checkins.count
         end
       end
 
@@ -291,12 +288,11 @@ class UserTest < ActiveSupport::TestCase
         setup do
           attend_class_time(@user, Date.today, 10)
           attend_class_time(@user, Date.today, 15)
-
-          @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+          stub_foursquare_checkin_for(@balham)
         end
 
         should "only record a single checkin" do      
-          assert_equal 1, @user.attempt_auto_checkin.count
+          assert_equal 1, @user.process_geo_checkins.count
         end
       end
 
@@ -304,13 +300,12 @@ class UserTest < ActiveSupport::TestCase
         setup do
           attend_class_time(@user, Date.today, 10, @balham)
           attend_class_time(@user, Date.today, 15, @fulham)
-
-          @checkin_proxy.expects(:create).once.with({:venueId => @balham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
-          @checkin_proxy.expects(:create).once.with({:venueId => @fulham.foursquare_venue_id, :broadcast => "public"}).returns(:checkin)
+          stub_foursquare_checkin_for(@balham)
+          stub_foursquare_checkin_for(@fulham)
         end
 
         should "record a two checkins" do      
-          assert_equal 2, @user.attempt_auto_checkin.count
+          assert_equal 2, @user.process_geo_checkins.count
         end
       end
     end
@@ -318,21 +313,13 @@ class UserTest < ActiveSupport::TestCase
     context "User with foursquare access token who has already manually checked in to studio" do
       setup do
         @user = Factory.create(:user, :foursquare_access_token => "ABC")
-        
-        foursquare = Foursquare::Base.new(@user.foursquare_access_token)
-        checkin = Foursquare::Checkin.new(foursquare, {})
-        venue = Foursquare::Venue.new(foursquare, {'id' => @balham.foursquare_venue_id})    
-        checkin.stubs(:venue => venue)
-        
-        @checkin_proxy = mock()
-        @checkin_proxy.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns([checkin])        
-        Foursquare::Base.any_instance.stubs(:checkins).returns(@checkin_proxy)
-    
+        checkin = stub_foursquare_user_checkin(@user, @balham)        
+        stub_foursquare_checkins([checkin])
         attend_class_time(@user, Date.today, 15)
       end
     
       should "not create a checkin" do
-        assert_equal 0, @user.attempt_auto_checkin.count
+        assert_equal 0, @user.process_geo_checkins.count
       end
     end
     
@@ -341,10 +328,13 @@ class UserTest < ActiveSupport::TestCase
         @user = Factory.create(:user)
         attend_class_time(@user, Date.today, 15)
       end
+      
+      should "not have foursquare access token" do
+        assert_nil @user.foursquare_access_token
+      end
 
       should "not create a checkin" do
-        assert_nil @user.foursquare_access_token
-        assert_equal 0, @user.attempt_auto_checkin.count
+        assert_equal 0, @user.process_geo_checkins.count
       end
     end
   end

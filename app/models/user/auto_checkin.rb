@@ -6,7 +6,7 @@ module User::AutoCheckin
 
   module InstanceMethods
     
-    def attempt_auto_checkin
+    def process_geo_checkins
       practiced_today = lessons.where('attended_at >= ?', Date.today)
       auto_checkin_for(practiced_today)
     end

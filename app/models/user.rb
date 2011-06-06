@@ -44,9 +44,8 @@ class User < ActiveRecord::Base
     if lessons_imported.present?
       # calculate stats
       update_progress(lessons_imported)
-      
-      # auto foursquare checkin
-      attempt_auto_checkin
+      # auto geo checkin (4sq, gowalla)
+      process_geo_checkins
     end
   
     return lessons_imported

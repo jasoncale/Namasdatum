@@ -16,8 +16,6 @@ class ActiveSupport::TestCase
     Timecop.return
   end
 
-  # Add more helper methods to be used by all tests here...
-
   def sign_up(attributes)
     attributes.reverse_merge!(Factory.attributes_for(:user))
 
@@ -98,7 +96,35 @@ class ActiveSupport::TestCase
   def default_studio
     @default_studio ||= Studio.find_or_create_by_name("Balham")
   end
+  
+  # FOURSQUARE HELPERS
 
+  def stub_foursquare_checkins(checkins = [])
+    @foursquare_checkins = mock()
+    @foursquare_checkins.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns(checkins)
+    Foursquare::Base.any_instance.stubs(:checkins).returns(@foursquare_checkins)
+    return @foursquare_checkins
+  end
+  
+  def foursquare_checkins
+    @foursquare_checkins ||= stub_foursquare_checkins([])
+  end
+  
+  def stub_foursquare_checkin_for(venue)
+    foursquare_checkins.expects(:create).once.with({
+      :venueId => venue.foursquare_venue_id, 
+      :broadcast => "public"
+    }).returns(:checkin)
+  end
+  
+  def stub_foursquare_user_checkin(user, venue)
+    foursquare = Foursquare::Base.new(user.foursquare_access_token)
+    checkin = Foursquare::Checkin.new(foursquare, {})
+    venue = Foursquare::Venue.new(foursquare, {'id' => venue.foursquare_venue_id})    
+    checkin.stubs(:venue => venue)
+    return checkin
+  end
+  
 end
 
 class ActionController::TestCase
