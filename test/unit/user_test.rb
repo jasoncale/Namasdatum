@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
         @user = Factory.create(:user, :mindbodyonline_user => '')
         @user.process_data        
       end
-
+  
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end
@@ -23,7 +23,7 @@ class UserTest < ActiveSupport::TestCase
         @user = Factory.create(:user, :mindbodyonline_pw => '')
         @user.process_data        
       end
-
+  
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end
@@ -125,7 +125,7 @@ class UserTest < ActiveSupport::TestCase
     setup do
       @user = Factory.create(:user, :username => "Bobby")
     end
-
+  
     should "be coverted to lowercase" do
       assert_equal("bobby", @user.username)
     end
@@ -134,7 +134,7 @@ class UserTest < ActiveSupport::TestCase
       setup do
         Factory.create(:user, :username => "Joe")      
       end
-
+  
       should "be checked on creation" do
         assert_raise(ActiveRecord::RecordInvalid) { Factory.create(:user, :username => "Joe") }
       end
@@ -149,14 +149,14 @@ class UserTest < ActiveSupport::TestCase
       end
     end
   end
-
+  
   context "Given a user who has attended class for last 3 days" do
     setup do
       @user = Factory.create(:user)
       streak_for @user, 3.days
       @user.update_progress(@user.lessons)
     end
-
+  
     should "calculate current streak length as 3 days" do
       assert_equal(3, @user.current_streak)
     end
@@ -226,7 +226,7 @@ class UserTest < ActiveSupport::TestCase
     should "have 7 lessons recorded" do
       assert_equal(7, @user.lessons.count)
     end
-
+  
     should "currently streak length of 7" do
       assert_equal(7, @user.current_streak)
     end
@@ -240,7 +240,7 @@ class UserTest < ActiveSupport::TestCase
       # remove 2rd & 4th day
       @user.lessons[1].destroy
       @user.lessons[3].destroy
-
+  
       # double on the 3rd & 5th day
       attend_class_time(@user, 5.days.ago, 15)
       attend_class_time(@user, 3.days.ago, 15)
@@ -256,7 +256,7 @@ class UserTest < ActiveSupport::TestCase
     should "have 7 lessons recorded" do
       assert_equal(7, @user.lessons.count)
     end
-
+  
     should "currently streak length of 1" do
       assert_equal(1, @user.current_streak)
     end
@@ -304,8 +304,16 @@ class UserTest < ActiveSupport::TestCase
           stub_foursquare_checkin_for(@fulham)
         end
 
-        should "record a two checkins" do      
+        should "record two checkins" do      
           assert_equal 2, @user.process_geo_checkins.count
+        end
+        
+        should "record checkin for balham" do
+          assert @user.process_geo_checkins.map(&:venue).include?("Balham")
+        end
+        
+        should "record checkin for fulham" do
+          assert @user.process_geo_checkins.map(&:venue).include?("Fulham")          
         end
       end
     end
@@ -321,11 +329,17 @@ class UserTest < ActiveSupport::TestCase
       should "not create a checkin" do
         assert_equal 0, @user.process_geo_checkins.count
       end
+      
+      should "know that user has already checked in" do
+        assert @user.foursquare_already_checked_in_at?(@balham)
+      end
     end
     
     context "User without foursqaure access token" do
       setup do
         @user = Factory.create(:user)
+        manual_checkin = stub_foursquare_user_checkin(@user, @balham)        
+        
         attend_class_time(@user, Date.today, 15)
       end
       
@@ -335,7 +349,8 @@ class UserTest < ActiveSupport::TestCase
 
       should "not create a checkin" do
         assert_equal 0, @user.process_geo_checkins.count
-      end
+      end      
     end
   end
+
 end

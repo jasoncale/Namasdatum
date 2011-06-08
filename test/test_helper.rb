@@ -99,9 +99,13 @@ class ActiveSupport::TestCase
   
   # FOURSQUARE HELPERS
 
+  def today_began_at
+    Time.local(Date.today.year, Date.today.month, Date.today.day).utc.to_i
+  end
+
   def stub_foursquare_checkins(checkins = [])
     @foursquare_checkins = mock()
-    @foursquare_checkins.expects(:all).with({:afterTimestamp => 1.day.ago.to_i}).returns(checkins)
+    @foursquare_checkins.stubs(:all).with({:afterTimestamp => today_began_at}).returns(checkins)
     Foursquare::Base.any_instance.stubs(:checkins).returns(@foursquare_checkins)
     return @foursquare_checkins
   end
@@ -114,7 +118,7 @@ class ActiveSupport::TestCase
     foursquare_checkins.expects(:create).once.with({
       :venueId => venue.foursquare_venue_id, 
       :broadcast => "public"
-    }).returns(:checkin)
+    }).returns(stub_everything("checkin", :venue => venue.name))
   end
   
   def stub_foursquare_user_checkin(user, venue)
