@@ -276,7 +276,7 @@ class UserTest < ActiveSupport::TestCase
       context "class a single studio" do
         setup do        
           attend_class_time(@user, Date.today, 15)
-          stub_foursquare_checkin_for(@balham)
+          expect_foursquare_checkin_for(@balham)
         end
 
         should "record a checkin" do
@@ -288,7 +288,7 @@ class UserTest < ActiveSupport::TestCase
         setup do
           attend_class_time(@user, Date.today, 10)
           attend_class_time(@user, Date.today, 15)
-          stub_foursquare_checkin_for(@balham)
+          expect_foursquare_checkin_for(@balham)
         end
 
         should "only record a single checkin" do      
@@ -300,8 +300,8 @@ class UserTest < ActiveSupport::TestCase
         setup do
           attend_class_time(@user, Date.today, 10, @balham)
           attend_class_time(@user, Date.today, 15, @fulham)
-          stub_foursquare_checkin_for(@balham)
-          stub_foursquare_checkin_for(@fulham)
+          expect_foursquare_checkin_for(@balham)
+          expect_foursquare_checkin_for(@fulham)
         end
 
         should "record two checkins" do      
@@ -353,4 +353,86 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  
+  context "Gowalla auto checkins" do
+    setup do      
+      @balham = Factory.create(:studio, :name => "Balham", :gowalla_venue_id => "VENUE_BALHAM", :lat => 123, :lng => 123)
+      @fulham = Factory.create(:studio, :name => "Fulham", :gowalla_venue_id => "VENUE_FULHAM", :lat => 456, :lng => 456)
+    end
+  
+    context "User with gowalla access token" do
+      setup do
+        @user = Factory.create(:user, :gowalla_access_token => "ABC", :gowalla_username => "jimmy")
+        stub_gowalla_checkins(@user, [])
+      end
+  
+      context "class a single studio" do
+        setup do        
+          attend_class_time(@user, Date.today, 15)
+          expect_gowalla_checkin_for(@user, @balham)          
+        end
+  
+        should "record a checkin" do
+          assert_equal 1, @user.process_geo_checkins.count
+        end
+      end
+  
+      context "two classes at a single studio" do
+        setup do
+          attend_class_time(@user, Date.today, 10)
+          attend_class_time(@user, Date.today, 15)
+          expect_gowalla_checkin_for(@user, @balham)          
+        end
+      
+        should "only record a single checkin" do      
+          assert_equal 1, @user.process_geo_checkins.count
+        end
+      end
+  
+      context "two classes, different studios" do
+        setup do
+          attend_class_time(@user, Date.today, 10, @balham)
+          attend_class_time(@user, Date.today, 15, @fulham)
+          expect_gowalla_checkin_for(@user, @balham)          
+          expect_gowalla_checkin_for(@user, @fulham)          
+        end
+      
+        should "record a two checkins" do      
+          assert_equal 2, @user.process_geo_checkins.count
+        end
+      end
+    end
+  
+    context "User with gowalla access token who has already manually checked in to studio" do
+      setup do
+        @user = Factory.create(:user, :gowalla_access_token => "ABC", :gowalla_username => "jimmy")
+        stub_existing_gowalla_checkin_for(@user, @balham)
+        attend_class_time(@user, Date.today, 15, @balham)
+      end
+    
+      should "not create a checkin" do
+        assert_equal 0, @user.process_geo_checkins.count
+      end
+    end
+  
+    context "User without gowalla access token" do
+      setup do
+        @user = Factory.create(:user)
+        attend_class_time(@user, Date.today, 15)
+      end
+    
+      should "not have gowalla access token" do
+        assert_nil @user.gowalla_access_token
+      end
+      
+      should "not be gowalla enabled" do
+        assert !@user.gowalla_enabled?
+      end
+    
+      should "not create a checkin" do
+        assert_equal 0, @user.process_geo_checkins.count
+      end
+    end
+  end
+  
 end

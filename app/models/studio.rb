@@ -7,4 +7,8 @@ class Studio < ActiveRecord::Base
   def gowalla_venue?
     gowalla_venue_id.present? 
   end
+  
+  def foursquare_venue?
+    foursquare_venue_id.present?
+  end
 end

@@ -40,11 +40,7 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def gowalla
-    @gowalla = Gowalla::Client.new(
-      :api_key     => Settings.gowalla_app_api_key,
-      :api_secret  =>  Settings.gowalla_app_secret,
-      :access_token => current_user.gowalla_access_token
-    )
+    @gowalla = Gowalla::Client.new(:access_token => current_user.gowalla_access_token)
   end
   
   def set_foursquare_auth_url

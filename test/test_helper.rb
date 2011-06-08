@@ -114,7 +114,7 @@ class ActiveSupport::TestCase
     @foursquare_checkins ||= stub_foursquare_checkins([])
   end
   
-  def stub_foursquare_checkin_for(venue)
+  def expect_foursquare_checkin_for(venue)
     foursquare_checkins.expects(:create).once.with({
       :venueId => venue.foursquare_venue_id, 
       :broadcast => "public"
@@ -128,7 +128,33 @@ class ActiveSupport::TestCase
     checkin.stubs(:venue => venue)
     return checkin
   end
+
+  # GOWALLA HELPERS
+
+  def stub_gowalla_checkins(user, checkins = [])
+    user.gowalla_client.stubs(:user_events).with(user.gowalla_username).returns(checkins)
+  end
   
+  def expect_gowalla_checkin_for(user, venue)
+    user.gowalla_client.expects(:checkin).once.with({
+      :spot_id => venue.gowalla_venue_id, 
+      :lat => venue.lat,
+      :lng => venue.lng,
+      :comment => "",
+      :post_to_twitter => false,
+      :post_to_facebook => false
+    }).returns(stub_everything("checkin", :venue => venue.name))
+  end  
+
+  def stub_existing_gowalla_checkin_for(user, venue)
+    checkin = stub_everything(
+      "checkin_#{venue.name.downcase}", 
+      :created_at => Date.today,
+      :venue => stub_everything('venue', :id => venue.gowalla_venue_id)
+    )
+    stub_gowalla_checkins(@user, [checkin])
+    user.gowalla_client.expects(:checkin).never
+  end
 end
 
 class ActionController::TestCase
