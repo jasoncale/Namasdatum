@@ -10,7 +10,7 @@ module User::AutoCheckin
   module InstanceMethods
 
     def process_geo_checkins
-      practiced_today = lessons.where('attended_at >= ? && attended_at <= ?', Date.today, Time.zone.now)
+      practiced_today = lessons.where('attended_at >= ? AND attended_at <= ?', Date.today, Time.zone.now)
       auto_checkin_for(practiced_today)
     end
 
