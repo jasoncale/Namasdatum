@@ -27,7 +27,7 @@ module User::AutoCheckin
     end
 
     def today_began_at
-      Time.local(Date.today.year, Date.today.month, Date.today.day).to_i
+      Time.zone.local(Date.today.year, Date.today.month, Date.today.day).to_i
     end
 
     def foursquare_client

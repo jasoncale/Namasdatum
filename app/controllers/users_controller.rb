@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  
+
   def show
     if @user = User.find_by_username(params[:id])
       @current_time = Time.zone.now
@@ -9,5 +9,5 @@ class UsersController < ApplicationController
       raise ActiveRecord::RecordNotFound
     end
   end
-  
+
 end

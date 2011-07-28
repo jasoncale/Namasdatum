@@ -106,7 +106,7 @@ class ActiveSupport::TestCase
   # FOURSQUARE HELPERS
 
   def today_began_at
-    Time.local(Date.today.year, Date.today.month, Date.today.day).utc.to_i
+    Time.zone.local(Date.today.year, Date.today.month, Date.today.day).utc.to_i
   end
 
   def stub_foursquare_checkins(checkins = [])

@@ -19,7 +19,7 @@ Factory.define(:teacher) do |f|
 end
 
 Factory.define(:lesson) do |f|
-  f.attended_at { Time.local(Time.now.year, Time.now.month, Time.now.day, 10) }
+  f.attended_at { Time.zone.local(Time.now.year, Time.now.month, Time.now.day, 10) }
   f.association :studio
   f.association :user
   f.association :teacher
