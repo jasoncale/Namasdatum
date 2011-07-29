@@ -6,24 +6,24 @@ class UserTest < ActiveSupport::TestCase
     setup do
       stub_user_history('user_history_single_lesson')
     end
-  
+
     context "mindbodyonline username missing" do
       setup do
         @user = Factory.create(:user, :mindbodyonline_user => '')
         @user.process_data
       end
-  
+
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end
     end
-  
+
     context "mindbodyonline password missing" do
       setup do
         @user = Factory.create(:user, :mindbodyonline_pw => '')
         @user.process_data
       end
-  
+
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end

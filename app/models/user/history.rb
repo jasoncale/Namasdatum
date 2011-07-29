@@ -45,12 +45,11 @@ module User::History
            studio = row.at_css('td:nth-child(5)').inner_text.gsub(/\302\240/, ' ').gsub('Hot Bikram Yoga', '').strip
 
            # format parsable date and remove any &nbsp;
-           attended_at_time = DateTime.strptime([date, time].join(" ").strip, '%d/%m/%Y %H:%M %p').to_time
-           attended_at_utc = Time.zone.local_to_utc(attended_at_time)
+           parsable_date = [date, time].join(" ").strip.gsub(/\//, '-')
 
            begin
              lesson = self.lessons.create({
-               :attended_at => attended_at_utc,
+               :attended_at => Time.zone.parse(parsable_date),
                :teacher => Teacher.find_or_create_by_name(teacher),
                :studio => Studio.find_or_create_by_name(studio)
              })
