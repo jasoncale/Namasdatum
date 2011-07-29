@@ -1,10 +1,10 @@
 module User::History
   extend ActiveSupport::Concern
-  
+
   module InstanceMethods
-    
+
     def fetch_lesson_history
-      return if self.mindbodyonline_user.blank? || self.mindbodyonline_pw.blank?    
+      return if self.mindbodyonline_user.blank? || self.mindbodyonline_pw.blank?
 
       lessons_imported = []
 
@@ -18,12 +18,12 @@ module User::History
 
       # Next we log in using the user credentials
       agent.post(
-        'https://clients.mindbodyonline.com/ASP/login_p.asp', 
-        "requiredtxtUserName" => self.mindbodyonline_user, 
+        'https://clients.mindbodyonline.com/ASP/login_p.asp',
+        "requiredtxtUserName" => self.mindbodyonline_user,
         "requiredtxtPassword" => self.mindbodyonline_pw
       )
 
-      agent.get("https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2") do |history_page|      
+      agent.get("https://clients.mindbodyonline.com/ASP/my_vh.asp?tabID=2") do |history_page|
         lessons_imported = record_lessons(history_page.root)
       end
 
@@ -33,7 +33,7 @@ module User::History
     private
 
     def record_lessons(document)
-      rows = document.css("table tr")    
+      rows = document.css("table tr")
       lessons_imported = []
 
       if rows.length > 2
@@ -45,30 +45,31 @@ module User::History
            studio = row.at_css('td:nth-child(5)').inner_text.gsub(/\302\240/, ' ').gsub('Hot Bikram Yoga', '').strip
 
            # format parsable date and remove any &nbsp;
-           date_to_parse = [date, time].join(" ").strip
+           attended_at_time = DateTime.strptime([date, time].join(" ").strip, '%d/%m/%Y %H:%M %p').to_time
+           attended_at_utc = Time.zone.local_to_utc(attended_at_time)
 
            begin
              lesson = self.lessons.create({
-               :attended_at => DateTime.strptime(date_to_parse, '%d/%m/%Y %H:%M %p').to_time.in_time_zone,
+               :attended_at => attended_at_utc,
                :teacher => Teacher.find_or_create_by_name(teacher),
                :studio => Studio.find_or_create_by_name(studio)
-             })       
+             })
 
              if lesson.valid?
                lessons_imported << lesson
-             end     
+             end
            rescue ArgumentError => e
              p "Import caused error #{e}"
-           end        
+           end
          end
-        end  
+        end
 
         # purge any failed lessons
         lessons.reload
-      end    
+      end
 
       return lessons_imported
     end
-  
+
   end
 end

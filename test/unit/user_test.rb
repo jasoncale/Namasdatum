@@ -6,24 +6,24 @@ class UserTest < ActiveSupport::TestCase
     setup do
       stub_user_history('user_history_single_lesson')
     end
-
+  
     context "mindbodyonline username missing" do
       setup do
         @user = Factory.create(:user, :mindbodyonline_user => '')
         @user.process_data
       end
-
+  
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end
     end
-
+  
     context "mindbodyonline password missing" do
       setup do
         @user = Factory.create(:user, :mindbodyonline_pw => '')
         @user.process_data
       end
-
+  
       should "not create any lessons" do
         assert_equal(0, @user.lessons.count)
       end
@@ -41,8 +41,12 @@ class UserTest < ActiveSupport::TestCase
       assert_equal(1, @user.lessons.count)
     end
 
-    should "record the correct lesson time" do
-      assert_equal(Time.zone.parse('2010-11-30 10:00:00'), @user.lessons.first.attended_at)
+    should "record the correct lesson time in the database (as UTC)" do
+      assert_equal(Time.utc(2011,7,26,9), @user.lessons.first['attended_at'])
+    end
+
+    should "present the time in the britsh summer time" do
+      assert_equal(Time.utc(2011,7,26,9).in_time_zone, @user.lessons.first.attended_at)
     end
 
     should "record the teacher" do
