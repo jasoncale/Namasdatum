@@ -4,3 +4,4 @@ log/*.log
 tmp
 tmp/**/*
 db/seeds.yml
+Procfile
